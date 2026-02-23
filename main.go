@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-
+	//跟本主機的交管系統連線
 	grpcFleetClient := api.NewGRPCFleetClient("localhost:50051")
 	go grpcFleetClient.MaintainConnectionWithFleet()
 	go grpcFleetClient.StartHeartbeatToFleet(30 * time.Second)
