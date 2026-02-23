@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+
+option go_package = "kenmec/ha/protoGen;gen";
+
+package ha_pb;
+
+
+message ClientMessage {
+  oneof payload {
+    int32 hb = 1;
+
+  }
+}
+
+message ServerMessage {
+  oneof payload {
+    int32 hb = 1;
+  }
+}
+
+
+// bidirectional Streaming
+service HAService {
+  // bidirectional Streaming
+  rpc HAStreaming(stream ClientMessage) returns (stream ServerMessage);
+}

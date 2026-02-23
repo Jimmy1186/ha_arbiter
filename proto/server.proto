@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option go_package = "kenmec/ha/protoGen;gen";
+
+package ha_sync_pb;
+
+message StatusResponse {
+  oneof payload {
+    int32 hb = 1;
+    // Add other status fields as needed
+  }
+}
+
+message StatusRequest {
+  oneof payload {
+    int32 hb = 1;
+    // Add other status fields as needed
+  }
+}
+
+// bidirectional Streaming
+service HASyncService {
+    // Use streaming for continuous status exchange
+    rpc ExchangeStatus (stream StatusRequest) returns (stream StatusResponse);
+}

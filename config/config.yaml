@@ -1,0 +1,7 @@
+PRIORITY: 3
+
+SERVER_IP: "localhost"
+SERVER_PORT: "50052"
+
+CLIENT_IP: "localhost"
+CLIENT_PORT: "50053"
