@@ -115,7 +115,7 @@ func (g *GRPCHAClient) ReceiveMessage() {
 			break
 		}
 
-		log.Printf("📨 收到訊息: %+v", msg)
+		log.Printf("📨  這裡不可以接收訊息❌ ❌ : %+v", msg)
 	}
 }
 
@@ -150,10 +150,10 @@ func (g *GRPCHAClient) MaintainConnection() {
 		}
 
 		if !g.isConnected {
-			log.Printf("🔄 嘗試重新連線... (第 %d 次)", retryCount+1)
+			log.Printf("🔄 HA 嘗試重新連線... (第 %d 次)", retryCount+1)
 
 			if err := g.Conneect(); err != nil {
-				log.Printf("❌ 重連失敗: %v，%v 秒後重試...", err, g.reconnectDelay.Seconds())
+				log.Printf("❌ HA 重連失敗: %v，%v 秒後重試...", err, g.reconnectDelay.Seconds())
 				time.Sleep(g.reconnectDelay)
 				retryCount++
 				continue
@@ -164,6 +164,16 @@ func (g *GRPCHAClient) MaintainConnection() {
 		}
 
 		time.Sleep(1 * time.Second)
+	}
+}
+
+func (g *GRPCHAClient) LoggingConnectionStatus() {
+	for {
+		if !g.IsConnected() {
+			log.Println("⏳ 等待 HA gRPC 連線到另外一台HA...")
+			time.Sleep(1 * time.Second)
+		}
+
 	}
 }
 

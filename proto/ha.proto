@@ -6,20 +6,26 @@ option go_package = "kenmec/ha/protoGen;gen";
 package ha_pb;
 
 
+
+
+// 從ha送過去給交管的資料
 message ClientMessage {
   oneof payload {
     int32 hb = 1;
-
   }
 }
 
+// 從交管送過來的資料
 message ServerMessage {
   oneof payload {
     int32 hb = 1;
+    // 啟動系統線線上後 會先發一次的狀態 交管只要有改編
+    bool is_ecs_connected = 2; 
+    bool is_fleet_connected = 3;
   }
 }
 
-
+// 這個檔案是用來與本機交管系統溝通用
 // bidirectional Streaming
 service HAService {
   // bidirectional Streaming

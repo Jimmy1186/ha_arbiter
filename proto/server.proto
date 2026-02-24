@@ -4,20 +4,30 @@ option go_package = "kenmec/ha/protoGen;gen";
 
 package ha_sync_pb;
 
-message StatusResponse {
-  oneof payload {
-    int32 hb = 1;
-    // Add other status fields as needed
-  }
-}
 
+// 從此ha送給另外一台ha的資料 不可接收資料 （client）
 message StatusRequest {
   oneof payload {
     int32 hb = 1;
-    // Add other status fields as needed
+    bool is_ha_connected =2;
+    bool is_fleet_connected = 3;
+    bool is_ecs_connected = 4;
   }
 }
 
+// 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
+message StatusResponse {
+  oneof payload {
+    int32 hb = 1;
+    bool is_ha_connected =2;
+    bool is_fleet_connected = 3;
+    bool is_ecs_connected = 4;
+  }
+}
+
+
+
+// 這個檔案是用來與另外的ha互相溝通用
 // bidirectional Streaming
 service HASyncService {
     // Use streaming for continuous status exchange

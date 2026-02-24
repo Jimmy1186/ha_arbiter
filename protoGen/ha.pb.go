@@ -21,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 從ha送過去給交管的資料
 type ClientMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Payload:
@@ -87,11 +88,14 @@ type ClientMessage_Hb struct {
 
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
 
+// 從交管送過來的資料
 type ServerMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ServerMessage_Hb
+	//	*ServerMessage_IsEcsConnected
+	//	*ServerMessage_IsFleetConnected
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -143,6 +147,24 @@ func (x *ServerMessage) GetHb() int32 {
 	return 0
 }
 
+func (x *ServerMessage) GetIsEcsConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_IsEcsConnected); ok {
+			return x.IsEcsConnected
+		}
+	}
+	return false
+}
+
+func (x *ServerMessage) GetIsFleetConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_IsFleetConnected); ok {
+			return x.IsFleetConnected
+		}
+	}
+	return false
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -151,7 +173,20 @@ type ServerMessage_Hb struct {
 	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"`
 }
 
+type ServerMessage_IsEcsConnected struct {
+	// 啟動系統線線上後 會先發一次的狀態 交管只要有改編
+	IsEcsConnected bool `protobuf:"varint,2,opt,name=is_ecs_connected,json=isEcsConnected,proto3,oneof"`
+}
+
+type ServerMessage_IsFleetConnected struct {
+	IsFleetConnected bool `protobuf:"varint,3,opt,name=is_fleet_connected,json=isFleetConnected,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
+
+func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
+
+func (*ServerMessage_IsFleetConnected) isServerMessage_Payload() {}
 
 var File_ha_proto protoreflect.FileDescriptor
 
@@ -160,9 +195,11 @@ const file_ha_proto_rawDesc = "" +
 	"\bha.proto\x12\x05ha_pb\",\n" +
 	"\rClientMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hbB\t\n" +
-	"\apayload\",\n" +
+	"\apayload\"\x88\x01\n" +
 	"\rServerMessage\x12\x10\n" +
-	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hbB\t\n" +
+	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
+	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
+	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnectedB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -204,6 +241,8 @@ func file_ha_proto_init() {
 	}
 	file_ha_proto_msgTypes[1].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
+		(*ServerMessage_IsEcsConnected)(nil),
+		(*ServerMessage_IsFleetConnected)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

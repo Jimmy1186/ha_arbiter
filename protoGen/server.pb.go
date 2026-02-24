@@ -21,77 +21,15 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type StatusResponse struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Types that are valid to be assigned to Payload:
-	//
-	//	*StatusResponse_Hb
-	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *StatusResponse) Reset() {
-	*x = StatusResponse{}
-	mi := &file_server_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *StatusResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*StatusResponse) ProtoMessage() {}
-
-func (x *StatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_server_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use StatusResponse.ProtoReflect.Descriptor instead.
-func (*StatusResponse) Descriptor() ([]byte, []int) {
-	return file_server_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *StatusResponse) GetPayload() isStatusResponse_Payload {
-	if x != nil {
-		return x.Payload
-	}
-	return nil
-}
-
-func (x *StatusResponse) GetHb() int32 {
-	if x != nil {
-		if x, ok := x.Payload.(*StatusResponse_Hb); ok {
-			return x.Hb
-		}
-	}
-	return 0
-}
-
-type isStatusResponse_Payload interface {
-	isStatusResponse_Payload()
-}
-
-type StatusResponse_Hb struct {
-	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"` // Add other status fields as needed
-}
-
-func (*StatusResponse_Hb) isStatusResponse_Payload() {}
-
+// 從此ha送給另外一台ha的資料 不可接收資料 （client）
 type StatusRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*StatusRequest_Hb
+	//	*StatusRequest_IsHaConnected
+	//	*StatusRequest_IsFleetConnected
+	//	*StatusRequest_IsEcsConnected
 	Payload       isStatusRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -99,7 +37,7 @@ type StatusRequest struct {
 
 func (x *StatusRequest) Reset() {
 	*x = StatusRequest{}
-	mi := &file_server_proto_msgTypes[1]
+	mi := &file_server_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -111,7 +49,7 @@ func (x *StatusRequest) String() string {
 func (*StatusRequest) ProtoMessage() {}
 
 func (x *StatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_server_proto_msgTypes[1]
+	mi := &file_server_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -124,7 +62,7 @@ func (x *StatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusRequest.ProtoReflect.Descriptor instead.
 func (*StatusRequest) Descriptor() ([]byte, []int) {
-	return file_server_proto_rawDescGZIP(), []int{1}
+	return file_server_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *StatusRequest) GetPayload() isStatusRequest_Payload {
@@ -143,27 +81,193 @@ func (x *StatusRequest) GetHb() int32 {
 	return 0
 }
 
+func (x *StatusRequest) GetIsHaConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_IsHaConnected); ok {
+			return x.IsHaConnected
+		}
+	}
+	return false
+}
+
+func (x *StatusRequest) GetIsFleetConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_IsFleetConnected); ok {
+			return x.IsFleetConnected
+		}
+	}
+	return false
+}
+
+func (x *StatusRequest) GetIsEcsConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_IsEcsConnected); ok {
+			return x.IsEcsConnected
+		}
+	}
+	return false
+}
+
 type isStatusRequest_Payload interface {
 	isStatusRequest_Payload()
 }
 
 type StatusRequest_Hb struct {
-	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"` // Add other status fields as needed
+	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"`
+}
+
+type StatusRequest_IsHaConnected struct {
+	IsHaConnected bool `protobuf:"varint,2,opt,name=is_ha_connected,json=isHaConnected,proto3,oneof"`
+}
+
+type StatusRequest_IsFleetConnected struct {
+	IsFleetConnected bool `protobuf:"varint,3,opt,name=is_fleet_connected,json=isFleetConnected,proto3,oneof"`
+}
+
+type StatusRequest_IsEcsConnected struct {
+	IsEcsConnected bool `protobuf:"varint,4,opt,name=is_ecs_connected,json=isEcsConnected,proto3,oneof"`
 }
 
 func (*StatusRequest_Hb) isStatusRequest_Payload() {}
+
+func (*StatusRequest_IsHaConnected) isStatusRequest_Payload() {}
+
+func (*StatusRequest_IsFleetConnected) isStatusRequest_Payload() {}
+
+func (*StatusRequest_IsEcsConnected) isStatusRequest_Payload() {}
+
+// 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
+type StatusResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Payload:
+	//
+	//	*StatusResponse_Hb
+	//	*StatusResponse_IsHaConnected
+	//	*StatusResponse_IsFleetConnected
+	//	*StatusResponse_IsEcsConnected
+	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatusResponse) Reset() {
+	*x = StatusResponse{}
+	mi := &file_server_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusResponse) ProtoMessage() {}
+
+func (x *StatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusResponse.ProtoReflect.Descriptor instead.
+func (*StatusResponse) Descriptor() ([]byte, []int) {
+	return file_server_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *StatusResponse) GetPayload() isStatusResponse_Payload {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetHb() int32 {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_Hb); ok {
+			return x.Hb
+		}
+	}
+	return 0
+}
+
+func (x *StatusResponse) GetIsHaConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_IsHaConnected); ok {
+			return x.IsHaConnected
+		}
+	}
+	return false
+}
+
+func (x *StatusResponse) GetIsFleetConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_IsFleetConnected); ok {
+			return x.IsFleetConnected
+		}
+	}
+	return false
+}
+
+func (x *StatusResponse) GetIsEcsConnected() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_IsEcsConnected); ok {
+			return x.IsEcsConnected
+		}
+	}
+	return false
+}
+
+type isStatusResponse_Payload interface {
+	isStatusResponse_Payload()
+}
+
+type StatusResponse_Hb struct {
+	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"`
+}
+
+type StatusResponse_IsHaConnected struct {
+	IsHaConnected bool `protobuf:"varint,2,opt,name=is_ha_connected,json=isHaConnected,proto3,oneof"`
+}
+
+type StatusResponse_IsFleetConnected struct {
+	IsFleetConnected bool `protobuf:"varint,3,opt,name=is_fleet_connected,json=isFleetConnected,proto3,oneof"`
+}
+
+type StatusResponse_IsEcsConnected struct {
+	IsEcsConnected bool `protobuf:"varint,4,opt,name=is_ecs_connected,json=isEcsConnected,proto3,oneof"`
+}
+
+func (*StatusResponse_Hb) isStatusResponse_Payload() {}
+
+func (*StatusResponse_IsHaConnected) isStatusResponse_Payload() {}
+
+func (*StatusResponse_IsFleetConnected) isStatusResponse_Payload() {}
+
+func (*StatusResponse_IsEcsConnected) isStatusResponse_Payload() {}
 
 var File_server_proto protoreflect.FileDescriptor
 
 const file_server_proto_rawDesc = "" +
 	"\n" +
 	"\fserver.proto\x12\n" +
-	"ha_sync_pb\"-\n" +
-	"\x0eStatusResponse\x12\x10\n" +
-	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hbB\t\n" +
-	"\apayload\",\n" +
+	"ha_sync_pb\"\xb2\x01\n" +
 	"\rStatusRequest\x12\x10\n" +
-	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hbB\t\n" +
+	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
+	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
+	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x12*\n" +
+	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnectedB\t\n" +
+	"\apayload\"\xb3\x01\n" +
+	"\x0eStatusResponse\x12\x10\n" +
+	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
+	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
+	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x12*\n" +
+	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnectedB\t\n" +
 	"\apayload2\\\n" +
 	"\rHASyncService\x12K\n" +
 	"\x0eExchangeStatus\x12\x19.ha_sync_pb.StatusRequest\x1a\x1a.ha_sync_pb.StatusResponse(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -182,12 +286,12 @@ func file_server_proto_rawDescGZIP() []byte {
 
 var file_server_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_server_proto_goTypes = []any{
-	(*StatusResponse)(nil), // 0: ha_sync_pb.StatusResponse
-	(*StatusRequest)(nil),  // 1: ha_sync_pb.StatusRequest
+	(*StatusRequest)(nil),  // 0: ha_sync_pb.StatusRequest
+	(*StatusResponse)(nil), // 1: ha_sync_pb.StatusResponse
 }
 var file_server_proto_depIdxs = []int32{
-	1, // 0: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
-	0, // 1: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
+	0, // 0: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
+	1, // 1: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -201,10 +305,16 @@ func file_server_proto_init() {
 		return
 	}
 	file_server_proto_msgTypes[0].OneofWrappers = []any{
-		(*StatusResponse_Hb)(nil),
+		(*StatusRequest_Hb)(nil),
+		(*StatusRequest_IsHaConnected)(nil),
+		(*StatusRequest_IsFleetConnected)(nil),
+		(*StatusRequest_IsEcsConnected)(nil),
 	}
 	file_server_proto_msgTypes[1].OneofWrappers = []any{
-		(*StatusRequest_Hb)(nil),
+		(*StatusResponse_Hb)(nil),
+		(*StatusResponse_IsHaConnected)(nil),
+		(*StatusResponse_IsFleetConnected)(nil),
+		(*StatusResponse_IsEcsConnected)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

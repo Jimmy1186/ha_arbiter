@@ -26,6 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
+// 這個檔案是用來與本機交管系統溝通用
 // bidirectional Streaming
 type HAServiceClient interface {
 	// bidirectional Streaming
@@ -57,6 +58,7 @@ type HAService_HAStreamingClient = grpc.BidiStreamingClient[ClientMessage, Serve
 // All implementations must embed UnimplementedHAServiceServer
 // for forward compatibility.
 //
+// 這個檔案是用來與本機交管系統溝通用
 // bidirectional Streaming
 type HAServiceServer interface {
 	// bidirectional Streaming

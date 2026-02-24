@@ -24,6 +24,9 @@ type GRPCFleetClient struct {
 	reconnectDelay time.Duration
 	maxRetries     int
 	isConnected    bool
+
+	//用類似callback的方式 可以在其他地方呼叫用
+	OnReceiveMsg func(msg *pb.ServerMessage)
 }
 
 func NewGRPCFleetClient(address string) *GRPCFleetClient {
@@ -115,7 +118,8 @@ func (g *GRPCFleetClient) ReceiveMessageFromFleet() {
 			break
 		}
 
-		log.Printf("📨 收到訊息: %+v", msg)
+		g.OnReceiveMsg(msg)
+		log.Printf("📨 收到訊息來自交管: %+v", msg)
 	}
 }
 
@@ -150,10 +154,10 @@ func (g *GRPCFleetClient) MaintainConnectionWithFleet() {
 		}
 
 		if !g.isConnected {
-			log.Printf("🔄 嘗試重新連線... (第 %d 次)", retryCount+1)
+			log.Printf("🔄 FLEET 嘗試重新連線... (第 %d 次)", retryCount+1)
 
 			if err := g.ConneectToFleet(); err != nil {
-				log.Printf("❌ 重連失敗: %v，%v 秒後重試...", err, g.reconnectDelay.Seconds())
+				log.Printf("❌ FLEET 重連失敗: %v，%v 秒後重試...", err, g.reconnectDelay.Seconds())
 				time.Sleep(g.reconnectDelay)
 				retryCount++
 				continue
@@ -167,10 +171,25 @@ func (g *GRPCFleetClient) MaintainConnectionWithFleet() {
 	}
 }
 
+func (g *GRPCFleetClient) LoggingConnectionStatus() {
+	for {
+		if !g.IsConnectedToFleet() {
+			log.Println("⏳ 等待 gRPC 連線到交管...")
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
 func (g *GRPCFleetClient) IsConnectedToFleet() bool {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
 	return g.isConnected
+}
+
+func (g *GRPCFleetClient) UpdateConnectStatus(isConnect bool) {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+	g.isConnected = isConnect
 }
 
 func (g *GRPCFleetClient) CloseWithFleet() {
