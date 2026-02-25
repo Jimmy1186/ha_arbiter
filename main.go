@@ -22,11 +22,11 @@ func main() {
 	go haClient.MaintainConnection()
 	go haClient.LoggingConnectionStatus()
 
-	aribiter := internal.NewArbiter(grpcFleetClient, haClient, haServer)
-	go aribiter.MsgHandler()
-	go aribiter.StartHeartbeatToOtherHA()
-	go aribiter.StartFleetHbMonitor()
-	go aribiter.StartOtherHaHbMonitor()
+	arbiter := internal.NewArbiter(grpcFleetClient, haClient, haServer)
+	go arbiter.MsgHandler()
+	go arbiter.StartHeartbeatToOtherHA()
+	go arbiter.StartFleetHbMonitor()
+	go arbiter.StartOtherHaHbMonitor()
 
-	internal.StartRestWebApi(aribiter)
+	internal.StartRestWebApi(arbiter)
 }

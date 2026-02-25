@@ -19,9 +19,15 @@ func StartRestWebApi(arbiter *Arbiter) {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	r.POST("/health", func(ctx *gin.Context) {
+	r.GET("/health", func(ctx *gin.Context) {
 		arbiter.mu.RLock()
 		defer arbiter.mu.RUnlock()
+
+		if arbiter.Maintenance {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status": "維修此機器中",
+			})
+		}
 
 		if arbiter.Self.ECS && arbiter.Self.Fleet {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -34,6 +40,20 @@ func StartRestWebApi(arbiter *Arbiter) {
 				"fleet":  arbiter.Self.Fleet,
 			})
 		}
+
+	})
+
+	r.GET("/maintenance", func(ctx *gin.Context) {
+		enable := ctx.Query("enable") == "true"
+
+		arbiter.mu.Lock()
+		arbiter.Maintenance = enable
+		arbiter.mu.Unlock()
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+			"enable": enable,
+		})
 
 	})
 

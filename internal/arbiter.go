@@ -22,6 +22,8 @@ type Arbiter struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
+	Maintenance bool
+
 	lastFleetHb    time.Time
 	hbFleetTimeout time.Duration
 
@@ -45,6 +47,8 @@ func NewArbiter(
 	return &Arbiter{
 		ctx:    ctx,
 		cancel: cancel,
+
+		Maintenance: false,
 
 		lastFleetHb:    time.Now(),
 		hbFleetTimeout: time.Duration(config.Cfg.FLEET_HB_TIMEOUT) * time.Second,
@@ -156,7 +160,7 @@ func (a *Arbiter) StartFleetHbMonitor() {
 			timeout := a.hbFleetTimeout
 			a.mu.RUnlock()
 
-			if time.Since(last) > timeout {
+			if time.Since(last) > timeout || !a.fleetClient.IsConnectedToFleet() {
 				log.Printf("⚠️  WARN: Fleet heartbeat timeout! 超過 %v 秒未收到", timeout.Seconds())
 				a.mu.Lock()
 				a.Self.Fleet = false
