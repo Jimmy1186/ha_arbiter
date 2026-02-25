@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"io"
+	"kenmec/ha/jimmy/config"
 	pb "kenmec/ha/jimmy/protoGen"
 	"log"
 	"sync"
@@ -118,13 +119,14 @@ func (g *GRPCFleetClient) ReceiveMessageFromFleet() {
 			break
 		}
 
-		g.OnReceiveMsg(msg)
 		log.Printf("📨 收到訊息來自交管: %+v", msg)
+		g.OnReceiveMsg(msg)
 	}
 }
 
-func (g *GRPCFleetClient) StartHeartbeatToFleet(interval time.Duration) {
-	ticker := time.NewTicker(interval)
+// 跟交管心跳用
+func (g *GRPCFleetClient) StartHeartbeatToFleet() {
+	ticker := time.NewTicker(time.Duration(config.Cfg.FLEET_HB_INTERVAL) * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -138,7 +140,7 @@ func (g *GRPCFleetClient) StartHeartbeatToFleet(interval time.Duration) {
 			}
 
 			if err := g.SendMessageToFleet(hbMsg); err != nil {
-				log.Printf("💓 心跳發送失敗: %v", err)
+				log.Printf("💓 心跳到交管發送失敗: %v", err)
 			}
 		}
 	}

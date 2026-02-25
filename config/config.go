@@ -8,13 +8,18 @@ import (
 )
 
 type Config struct {
-	ARBITOR_NAME string `yaml:"ARBITOR_NAME"`
-	DEFAULT_ROLE int32  `yaml:"DEFAULT_ROLE"`
-	PRIORITY     int32  `yaml:"PRIORITY"`
-	SERVER_IP    string `yaml:"SERVER_IP"`
-	SERVER_PORT  string `yaml:"SERVER_PORT"`
-	CLIENT_IP    string `yaml:"CLIENT_IP"`
-	CLIENT_PORT  string `yaml:"CLIENT_PORT"`
+	FLEET_HB_INTERVAL int32 `yaml:"FLEET_HB_INTERVAL"`
+	FLEET_HB_TIMEOUT  int32 `yaml:"FLEET_HB_TIMEOUT"`
+
+	OTHER_HA_HB_INTERVAL int32 `yaml:"OTHER_HA_HB_INTERVAL"`
+	OTHER_HA_HB_TIMEOUT  int32 `yaml:"OTHER_HA_HB_TIMEOUT"`
+
+	SERVER_IP   string `yaml:"SERVER_IP"`
+	SERVER_PORT string `yaml:"SERVER_PORT"`
+	CLIENT_IP   string `yaml:"CLIENT_IP"`
+	CLIENT_PORT string `yaml:"CLIENT_PORT"`
+
+	WEB_API_PORT string `yaml:"WEB_API_PORT"`
 }
 
 var Cfg Config

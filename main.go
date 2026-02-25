@@ -4,14 +4,13 @@ import (
 	"kenmec/ha/jimmy/api"
 	"kenmec/ha/jimmy/config"
 	"kenmec/ha/jimmy/internal"
-	"time"
 )
 
 func main() {
 	//跟本主機的交管系統連線
 	grpcFleetClient := api.NewGRPCFleetClient("localhost:50051")
 	go grpcFleetClient.MaintainConnectionWithFleet()
-	go grpcFleetClient.StartHeartbeatToFleet(30 * time.Second)
+	go grpcFleetClient.StartHeartbeatToFleet()
 	go grpcFleetClient.LoggingConnectionStatus()
 
 	// 監聽到另外一台的 HA
@@ -25,5 +24,9 @@ func main() {
 
 	aribiter := internal.NewArbiter(grpcFleetClient, haClient, haServer)
 	go aribiter.MsgHandler()
-	select {}
+	go aribiter.StartHeartbeatToOtherHA()
+	go aribiter.StartFleetHbMonitor()
+	go aribiter.StartOtherHaHbMonitor()
+
+	internal.StartRestWebApi(aribiter)
 }

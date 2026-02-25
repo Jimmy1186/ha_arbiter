@@ -6,30 +6,10 @@ import (
 	"kenmec/ha/jimmy/api"
 	"kenmec/ha/jimmy/config"
 	gen "kenmec/ha/jimmy/protoGen"
+	"log"
 	"sync"
 	"time"
 )
-
-type HARole int
-
-const (
-	RoleSlave = iota
-	RoleCandidate
-	RoleMaster
-)
-
-func (hr HARole) String() string {
-	switch hr {
-	case RoleSlave:
-		return "SLAVE"
-	case RoleCandidate:
-		return "CANDIDATE"
-	case RoleMaster:
-		return "MASTER"
-	default:
-		return "UNKNOWN"
-	}
-}
 
 type Connectivity struct {
 	ECS   bool
@@ -38,32 +18,22 @@ type Connectivity struct {
 }
 
 type Arbiter struct {
-	mu  sync.RWMutex
-	ctx context.Context
+	mu     sync.RWMutex
+	ctx    context.Context
+	cancel context.CancelFunc
 
-	name      string // 發送時來辨識哪個arbiter送的
-	role      HARole // SLAVE or MASTER
-	priority  int32
-	term      int32 // 如果得知斷線之類的 自動加1 大的當master
-	timestamp string
+	lastFleetHb    time.Time
+	hbFleetTimeout time.Duration
 
-	isActiveRedundancy bool
-	Self               Connectivity // 自己機器的連線狀態
-	Other              Connectivity // 另外一台的連線狀態
+	lastOtherHaHb  time.Time
+	hbOtherTimeout time.Duration
+
+	Self  Connectivity // 自己機器的連線狀態
+	Other Connectivity // 另外一台的連線狀態
 
 	fleetClient   *api.GRPCFleetClient
 	otherHaClient *api.GRPCHAClient
 	otherHaServer *api.HAToOtherServer
-}
-
-type OtherArbiter struct {
-	Name     string
-	Role     HARole
-	Term     int32
-	Priority int32
-
-	self  Connectivity
-	other Connectivity
 }
 
 func NewArbiter(
@@ -71,14 +41,17 @@ func NewArbiter(
 	otherHaClient *api.GRPCHAClient,
 	otherHaServer *api.HAToOtherServer,
 ) *Arbiter {
+	ctx, cancel := context.WithCancel(context.Background())
 	return &Arbiter{
-		name:      config.Cfg.ARBITOR_NAME,
-		role:      HARole(config.Cfg.DEFAULT_ROLE),
-		priority:  config.Cfg.PRIORITY,
-		term:      0,
-		timestamp: time.Now().Format("2006-01-02 15:04:05"),
+		ctx:    ctx,
+		cancel: cancel,
 
-		isActiveRedundancy: false,
+		lastFleetHb:    time.Now(),
+		hbFleetTimeout: time.Duration(config.Cfg.FLEET_HB_TIMEOUT) * time.Second,
+
+		lastOtherHaHb:  time.Now(),
+		hbOtherTimeout: time.Duration(config.Cfg.OTHER_HA_HB_TIMEOUT) * time.Second,
+
 		Self: Connectivity{
 			ECS:   false,
 			Fleet: false,
@@ -96,25 +69,25 @@ func NewArbiter(
 	}
 }
 
-func (a *Arbiter) CheckRole(otherArbiter OtherArbiter) {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	if otherArbiter.Term > a.term {
-		a.term = otherArbiter.Term
-		a.role = RoleSlave
-		return
-	}
-
-	if a.role == RoleMaster && otherArbiter.Role == RoleMaster {
-		if otherArbiter.Term == a.term {
-
-			if otherArbiter.Priority > a.priority {
-				a.role = RoleSlave
-				return
-			}
+// 每秒傳送本機的連線資訊到另外一台HA
+func (a *Arbiter) StartSyncArbiter(ctx context.Context) {
+	ticker := time.NewTicker(1 * time.Second)
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_PeerArbiter{
+					PeerArbiter: &gen.PeerArbiter{
+						Ecs:   a.Self.ECS,
+						Fleet: a.Self.Fleet,
+					},
+				},
+			})
 		}
 	}
+
 }
 
 func (a *Arbiter) MsgHandler() {
@@ -122,12 +95,15 @@ func (a *Arbiter) MsgHandler() {
 	a.fleetMsgHandler()
 }
 
+// 接收來自其他的HA的資料
 func (a *Arbiter) otherHaMsgHandler() {
 	a.otherHaServer.OnReceiveMsg = func(msg *gen.StatusRequest) {
 
 		switch m := msg.Payload.(type) {
 		case *gen.StatusRequest_Hb:
-			fmt.Printf("got heartbeat for other ha")
+			a.mu.Lock()
+			a.lastOtherHaHb = time.Now()
+			a.mu.Unlock()
 		case *gen.StatusRequest_IsHaConnected:
 			a.Other.Ha = m.IsHaConnected
 		case *gen.StatusRequest_IsEcsConnected:
@@ -142,18 +118,105 @@ func (a *Arbiter) otherHaMsgHandler() {
 	}
 }
 
+// 接收來自交管資料
 func (a *Arbiter) fleetMsgHandler() {
 	a.fleetClient.OnReceiveMsg = func(msg *gen.ServerMessage) {
 		switch m := msg.Payload.(type) {
 		case *gen.ServerMessage_Hb:
-			fmt.Printf("got heartbeat for FLEET")
+			a.mu.Lock()
+			a.lastFleetHb = time.Now()
+			a.mu.Unlock()
 		case *gen.ServerMessage_IsEcsConnected:
 			a.mu.Lock()
-			defer a.mu.Unlock()
 			a.Self.ECS = m.IsEcsConnected
+			a.mu.Unlock()
+			log.Printf("🛐 ecs status being update %v", a.Self.ECS)
 		case *gen.ServerMessage_IsFleetConnected:
 			a.fleetClient.UpdateConnectStatus(m.IsFleetConnected)
+			a.mu.Lock()
+			defer a.mu.Unlock()
+			a.Self.Fleet = m.IsFleetConnected
+			log.Printf("🇦🇨 fleet status being update %v", a.Self.Fleet)
 		}
 	}
 
+}
+
+// 監測與交管心跳是否有延遲
+func (a *Arbiter) StartFleetHbMonitor() {
+	ticker := time.NewTicker(1 * time.Second)
+
+	for {
+		select {
+		case <-a.ctx.Done():
+			return
+		case <-ticker.C:
+			a.mu.RLock()
+			last := a.lastFleetHb
+			timeout := a.hbFleetTimeout
+			a.mu.RUnlock()
+
+			if time.Since(last) > timeout {
+				log.Printf("⚠️  WARN: Fleet heartbeat timeout! 超過 %v 秒未收到", timeout.Seconds())
+				a.mu.Lock()
+				a.Self.Fleet = false
+				a.mu.Unlock()
+			} else {
+				a.mu.Lock()
+				a.Self.Fleet = true
+				a.mu.Unlock()
+			}
+		}
+	}
+}
+
+// 跟另外一台HA心跳用
+func (a *Arbiter) StartHeartbeatToOtherHA() {
+	ticker := time.NewTicker(time.Duration(config.Cfg.OTHER_HA_HB_INTERVAL) * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-a.ctx.Done():
+			return
+		case <-ticker.C:
+			err := a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_Hb{
+					Hb: int32(time.Now().Unix()),
+				},
+			})
+
+			if err != nil {
+				log.Printf("💓 心跳到其他HA發送失敗: %v", err)
+			}
+		}
+	}
+}
+
+// 監測與另外一台HA是否有延遲
+func (a *Arbiter) StartOtherHaHbMonitor() {
+	ticker := time.NewTicker(1 * time.Second)
+
+	for {
+		select {
+		case <-a.ctx.Done():
+			return
+		case <-ticker.C:
+			a.mu.RLock()
+			last := a.lastOtherHaHb
+			timeout := a.hbOtherTimeout
+			a.mu.RUnlock()
+
+			if time.Since(last) > timeout {
+				log.Printf("⚠️  WARN: other ha heartbeat timeout! 超過 %v 秒未收到", timeout.Seconds())
+				a.mu.Lock()
+				a.Other.Ha = false
+				a.mu.Unlock()
+			} else {
+				a.mu.Lock()
+				a.Other.Ha = true
+				a.mu.Unlock()
+			}
+		}
+	}
 }

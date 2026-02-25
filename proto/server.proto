@@ -5,6 +5,15 @@ option go_package = "kenmec/ha/protoGen;gen";
 package ha_sync_pb;
 
 
+
+
+message PeerArbiter {
+  bool ecs = 1;
+  bool fleet = 2;
+  bool ha = 3;
+}
+
+
 // 從此ha送給另外一台ha的資料 不可接收資料 （client）
 message StatusRequest {
   oneof payload {
@@ -12,6 +21,8 @@ message StatusRequest {
     bool is_ha_connected =2;
     bool is_fleet_connected = 3;
     bool is_ecs_connected = 4;
+
+    PeerArbiter peer_arbiter = 5;
   }
 }
 
@@ -22,6 +33,8 @@ message StatusResponse {
     bool is_ha_connected =2;
     bool is_fleet_connected = 3;
     bool is_ecs_connected = 4;
+
+    PeerArbiter peer_arbiter = 5;
   }
 }
 
