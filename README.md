@@ -8,7 +8,14 @@ server負責接收資料
 client負責發送資料
 HA_1 CLIENT -> HA_2 SERVER -> HA_2 CLIENT -> HA_1 SERVER
 
-# proto generate
+VIP資料夾
+設用來設定keeplived 用的
+透過keepalive來用REST API敲我的HA來看狀態判定扣分權重
+設定完後執行setting.sh會把資料塞到本機
+安裝用
+sudo apt install keepalived
+
+## proto generate 用來生成grpc的proto
 
 protoc --proto_path=./proto \
  --go_out=./protoGen --go_opt=paths=source_relative \
@@ -20,6 +27,6 @@ protoc --proto_path=./proto \
  --go-grpc_out=./protoGen --go-grpc_opt=paths=source_relative \
  server.proto
 
-# schema
+## schema
 
 mysqldump -u root -p --no-data corning_v2 > schema.sql

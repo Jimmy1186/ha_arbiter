@@ -1,0 +1,112 @@
+global_defs {                      
+   notification_email {      
+   acassen@firewall.loc     
+   failover@firewall.loc
+   sysadmin@firewall.loc
+   }
+   notification_email_from test@kenemc.com   
+   smtp_server ${SMTP_SERVER_IP}                         
+   smtp_connect_timeout 30                                  
+   router_id LVS_DEVEL
+   log_file /var/log/keepalived.log     
+}
+
+vrrp_script chk_traffic_alive {
+   script "/etc/keepalived/check_server_alive.sh"
+   interval 2
+   weight  -30
+   timeout 2
+   fall 2
+   rise 2
+}
+
+vrrp_script chk_mq_alive {
+   script "/etc/keepalived/check_mq_alive.sh"
+   interval 2
+   weight  -30
+   timeout 2
+   fall 2
+   rise 2
+}
+
+vrrp_script chk_db_alive {
+   script "/etc/keepalived/check_db_alive.sh"
+   interval 2
+   weight  -30
+   timeout 2
+   fall 2
+   rise 2
+}
+
+
+
+vrrp_instance TC_VI_${MACHINE_ID} {
+	state BACKUP
+	interface ${NETWORK_INTERFACE}
+	virtual_router_id 51
+	priority 100
+	advert_int 1
+	authentication {
+        	auth_type PASS
+       	 	auth_pass 1111
+    	}
+	virtual_ipaddress {
+		${VIP_1}/24 dev ${NETWORK_INTERFACE}
+	}
+	garp_master_delay 1
+    	garp_master_repeat 5
+    	garp_master_refresh 10
+
+	track_script {
+         chk_traffic_alive
+        }
+
+
+}
+
+vrrp_instance RABBIT_VI_${MACHINE_ID} {
+      state BACKUP
+        interface ${NETWORK_INTERFACE}
+        virtual_router_id 52
+        priority 100
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass 1111
+        }
+        virtual_ipaddress {
+                ${VIP_2}/24 dev ${NETWORK_INTERFACE}
+        }
+        garp_master_delay 1
+        garp_master_repeat 5
+        garp_master_refresh 10
+
+        track_script {
+          chk_mq_alive
+        }
+
+}
+
+
+vrrp_instance MYSQL_VI_${MACHINE_ID} {
+      state BACKUP
+        interface ${NETWORK_INTERFACE}
+        virtual_router_id 53
+        priority 100
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass 1111
+        }
+        virtual_ipaddress {
+                ${VIP_3}/24 dev ${NETWORK_INTERFACE}
+        }
+        garp_master_delay 1
+        garp_master_repeat 5
+        garp_master_refresh 10
+
+        track_script {
+          chk_db_alive
+        }
+}
+
