@@ -43,6 +43,20 @@ func StartRestWebApi(arbiter *Arbiter) {
 
 	})
 
+	r.POST("role_change", func(ctx *gin.Context) {
+		role := ctx.Query("role")
+
+		if role == "MASTER" {
+			arbiter.UpdateMaster(true)
+		} else {
+			arbiter.UpdateMaster(false)
+		}
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+			"role":   role,
+		})
+	})
+
 	r.GET("/maintenance", func(ctx *gin.Context) {
 		enable := ctx.Query("enable") == "true"
 

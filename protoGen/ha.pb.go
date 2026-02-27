@@ -21,12 +21,404 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type BookingInfo struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	PeripheralType int32                  `protobuf:"varint,1,opt,name=peripheral_type,json=peripheralType,proto3" json:"peripheral_type,omitempty"`
+	Action         string                 `protobuf:"bytes,2,opt,name=action,proto3" json:"action,omitempty"`
+	LocationId     string                 `protobuf:"bytes,3,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`
+	Level          int32                  `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
+	Booker         string                 `protobuf:"bytes,5,opt,name=booker,proto3" json:"booker,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *BookingInfo) Reset() {
+	*x = BookingInfo{}
+	mi := &file_ha_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BookingInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BookingInfo) ProtoMessage() {}
+
+func (x *BookingInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BookingInfo.ProtoReflect.Descriptor instead.
+func (*BookingInfo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *BookingInfo) GetPeripheralType() int32 {
+	if x != nil {
+		return x.PeripheralType
+	}
+	return 0
+}
+
+func (x *BookingInfo) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+func (x *BookingInfo) GetLocationId() string {
+	if x != nil {
+		return x.LocationId
+	}
+	return ""
+}
+
+func (x *BookingInfo) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *BookingInfo) GetBooker() string {
+	if x != nil {
+		return x.Booker
+	}
+	return ""
+}
+
+// 核心任務資訊
+type MissionInfo struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	AmrId                  []string               `protobuf:"bytes,1,rep,name=amr_id,json=amrId,proto3" json:"amr_id,omitempty"`
+	Priority               int32                  `protobuf:"varint,2,opt,name=priority,proto3" json:"priority,omitempty"`
+	Order                  int32                  `protobuf:"varint,3,opt,name=order,proto3" json:"order,omitempty"`
+	FullName               []string               `protobuf:"bytes,4,rep,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	SubName                string                 `protobuf:"bytes,5,opt,name=sub_name,json=subName,proto3" json:"sub_name,omitempty"`
+	Category               []string               `protobuf:"bytes,6,rep,name=category,proto3" json:"category,omitempty"`
+	IsAssigned             bool                   `protobuf:"varint,7,opt,name=is_assigned,json=isAssigned,proto3" json:"is_assigned,omitempty"`
+	ManualMode             bool                   `protobuf:"varint,8,opt,name=manual_mode,json=manualMode,proto3" json:"manual_mode,omitempty"`
+	EmergencyBtn           bool                   `protobuf:"varint,9,opt,name=emergency_btn,json=emergencyBtn,proto3" json:"emergency_btn,omitempty"`
+	RecoveryBtn            bool                   `protobuf:"varint,10,opt,name=recovery_btn,json=recoveryBtn,proto3" json:"recovery_btn,omitempty"`
+	MissionJson            *string                `protobuf:"bytes,11,opt,name=mission_json,json=missionJson,proto3,oneof" json:"mission_json,omitempty"`
+	WarningIdList          []int32                `protobuf:"varint,12,rep,packed,name=warning_id_list,json=warningIdList,proto3" json:"warning_id_list,omitempty"`
+	CancelReason           int32                  `protobuf:"varint,13,opt,name=cancel_reason,json=cancelReason,proto3" json:"cancel_reason,omitempty"`
+	Status                 int32                  `protobuf:"varint,14,opt,name=status,proto3" json:"status,omitempty"`
+	CreatedAt              string                 `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	AssignedAt             string                 `protobuf:"bytes,16,opt,name=assigned_at,json=assignedAt,proto3" json:"assigned_at,omitempty"`
+	StartedAt              string                 `protobuf:"bytes,17,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	TaskIdx                int32                  `protobuf:"varint,18,opt,name=task_idx,json=taskIdx,proto3" json:"task_idx,omitempty"`
+	CompletedAt            string                 `protobuf:"bytes,19,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`
+	Message                string                 `protobuf:"bytes,20,opt,name=message,proto3" json:"message,omitempty"`
+	BatteryCost            float32                `protobuf:"fixed32,21,opt,name=battery_cost,json=batteryCost,proto3" json:"battery_cost,omitempty"`
+	TotalDistanceTraveled  float32                `protobuf:"fixed32,22,opt,name=total_distance_traveled,json=totalDistanceTraveled,proto3" json:"total_distance_traveled,omitempty"`
+	BatteryRateWhenStarted float32                `protobuf:"fixed32,23,opt,name=battery_rate_when_started,json=batteryRateWhenStarted,proto3" json:"battery_rate_when_started,omitempty"`
+	Booking                []*BookingInfo         `protobuf:"bytes,24,rep,name=booking,proto3" json:"booking,omitempty"`
+	CycleId                *string                `protobuf:"bytes,25,opt,name=cycle_id,json=cycleId,proto3,oneof" json:"cycle_id,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *MissionInfo) Reset() {
+	*x = MissionInfo{}
+	mi := &file_ha_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MissionInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MissionInfo) ProtoMessage() {}
+
+func (x *MissionInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MissionInfo.ProtoReflect.Descriptor instead.
+func (*MissionInfo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *MissionInfo) GetAmrId() []string {
+	if x != nil {
+		return x.AmrId
+	}
+	return nil
+}
+
+func (x *MissionInfo) GetPriority() int32 {
+	if x != nil {
+		return x.Priority
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetOrder() int32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetFullName() []string {
+	if x != nil {
+		return x.FullName
+	}
+	return nil
+}
+
+func (x *MissionInfo) GetSubName() string {
+	if x != nil {
+		return x.SubName
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetCategory() []string {
+	if x != nil {
+		return x.Category
+	}
+	return nil
+}
+
+func (x *MissionInfo) GetIsAssigned() bool {
+	if x != nil {
+		return x.IsAssigned
+	}
+	return false
+}
+
+func (x *MissionInfo) GetManualMode() bool {
+	if x != nil {
+		return x.ManualMode
+	}
+	return false
+}
+
+func (x *MissionInfo) GetEmergencyBtn() bool {
+	if x != nil {
+		return x.EmergencyBtn
+	}
+	return false
+}
+
+func (x *MissionInfo) GetRecoveryBtn() bool {
+	if x != nil {
+		return x.RecoveryBtn
+	}
+	return false
+}
+
+func (x *MissionInfo) GetMissionJson() string {
+	if x != nil && x.MissionJson != nil {
+		return *x.MissionJson
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetWarningIdList() []int32 {
+	if x != nil {
+		return x.WarningIdList
+	}
+	return nil
+}
+
+func (x *MissionInfo) GetCancelReason() int32 {
+	if x != nil {
+		return x.CancelReason
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetAssignedAt() string {
+	if x != nil {
+		return x.AssignedAt
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetStartedAt() string {
+	if x != nil {
+		return x.StartedAt
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetTaskIdx() int32 {
+	if x != nil {
+		return x.TaskIdx
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetCompletedAt() string {
+	if x != nil {
+		return x.CompletedAt
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *MissionInfo) GetBatteryCost() float32 {
+	if x != nil {
+		return x.BatteryCost
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetTotalDistanceTraveled() float32 {
+	if x != nil {
+		return x.TotalDistanceTraveled
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetBatteryRateWhenStarted() float32 {
+	if x != nil {
+		return x.BatteryRateWhenStarted
+	}
+	return 0
+}
+
+func (x *MissionInfo) GetBooking() []*BookingInfo {
+	if x != nil {
+		return x.Booking
+	}
+	return nil
+}
+
+func (x *MissionInfo) GetCycleId() string {
+	if x != nil && x.CycleId != nil {
+		return *x.CycleId
+	}
+	return ""
+}
+
+type AgvWorkStatus struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	AmrId            string                 `protobuf:"bytes,1,opt,name=amr_id,json=amrId,proto3" json:"amr_id,omitempty"`
+	IsAssigning      bool                   `protobuf:"varint,2,opt,name=is_assigning,json=isAssigning,proto3" json:"is_assigning,omitempty"`
+	IsAssigned       bool                   `protobuf:"varint,3,opt,name=is_assigned,json=isAssigned,proto3" json:"is_assigned,omitempty"`
+	CurrentMissionId string                 `protobuf:"bytes,4,opt,name=current_mission_id,json=currentMissionId,proto3" json:"current_mission_id,omitempty"`
+	LastUpdateAt     string                 `protobuf:"bytes,5,opt,name=last_update_at,json=lastUpdateAt,proto3" json:"last_update_at,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AgvWorkStatus) Reset() {
+	*x = AgvWorkStatus{}
+	mi := &file_ha_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AgvWorkStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AgvWorkStatus) ProtoMessage() {}
+
+func (x *AgvWorkStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AgvWorkStatus.ProtoReflect.Descriptor instead.
+func (*AgvWorkStatus) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AgvWorkStatus) GetAmrId() string {
+	if x != nil {
+		return x.AmrId
+	}
+	return ""
+}
+
+func (x *AgvWorkStatus) GetIsAssigning() bool {
+	if x != nil {
+		return x.IsAssigning
+	}
+	return false
+}
+
+func (x *AgvWorkStatus) GetIsAssigned() bool {
+	if x != nil {
+		return x.IsAssigned
+	}
+	return false
+}
+
+func (x *AgvWorkStatus) GetCurrentMissionId() string {
+	if x != nil {
+		return x.CurrentMissionId
+	}
+	return ""
+}
+
+func (x *AgvWorkStatus) GetLastUpdateAt() string {
+	if x != nil {
+		return x.LastUpdateAt
+	}
+	return ""
+}
+
 // 從ha送過去給交管的資料
 type ClientMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ClientMessage_Hb
+	//	*ClientMessage_IsMaster
+	//	*ClientMessage_SyncMission
+	//	*ClientMessage_AgvWorkStatus
 	Payload       isClientMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -34,7 +426,7 @@ type ClientMessage struct {
 
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
-	mi := &file_ha_proto_msgTypes[0]
+	mi := &file_ha_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +438,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[0]
+	mi := &file_ha_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +451,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{0}
+	return file_ha_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ClientMessage) GetPayload() isClientMessage_Payload {
@@ -78,6 +470,33 @@ func (x *ClientMessage) GetHb() int32 {
 	return 0
 }
 
+func (x *ClientMessage) GetIsMaster() bool {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_IsMaster); ok {
+			return x.IsMaster
+		}
+	}
+	return false
+}
+
+func (x *ClientMessage) GetSyncMission() *MissionInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_SyncMission); ok {
+			return x.SyncMission
+		}
+	}
+	return nil
+}
+
+func (x *ClientMessage) GetAgvWorkStatus() *AgvWorkStatus {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_AgvWorkStatus); ok {
+			return x.AgvWorkStatus
+		}
+	}
+	return nil
+}
+
 type isClientMessage_Payload interface {
 	isClientMessage_Payload()
 }
@@ -86,7 +505,25 @@ type ClientMessage_Hb struct {
 	Hb int32 `protobuf:"varint,1,opt,name=hb,proto3,oneof"`
 }
 
+type ClientMessage_IsMaster struct {
+	IsMaster bool `protobuf:"varint,2,opt,name=is_master,json=isMaster,proto3,oneof"`
+}
+
+type ClientMessage_SyncMission struct {
+	SyncMission *MissionInfo `protobuf:"bytes,3,opt,name=sync_mission,json=syncMission,proto3,oneof"`
+}
+
+type ClientMessage_AgvWorkStatus struct {
+	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,4,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
+}
+
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
+
+func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
+
+func (*ClientMessage_SyncMission) isClientMessage_Payload() {}
+
+func (*ClientMessage_AgvWorkStatus) isClientMessage_Payload() {}
 
 // 從交管送過來的資料
 type ServerMessage struct {
@@ -96,6 +533,8 @@ type ServerMessage struct {
 	//	*ServerMessage_Hb
 	//	*ServerMessage_IsEcsConnected
 	//	*ServerMessage_IsFleetConnected
+	//	*ServerMessage_SyncMission
+	//	*ServerMessage_AgvWorkStatus
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -103,7 +542,7 @@ type ServerMessage struct {
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
-	mi := &file_ha_proto_msgTypes[1]
+	mi := &file_ha_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -115,7 +554,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[1]
+	mi := &file_ha_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -128,7 +567,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{1}
+	return file_ha_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ServerMessage) GetPayload() isServerMessage_Payload {
@@ -165,6 +604,24 @@ func (x *ServerMessage) GetIsFleetConnected() bool {
 	return false
 }
 
+func (x *ServerMessage) GetSyncMission() *MissionInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_SyncMission); ok {
+			return x.SyncMission
+		}
+	}
+	return nil
+}
+
+func (x *ServerMessage) GetAgvWorkStatus() *AgvWorkStatus {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_AgvWorkStatus); ok {
+			return x.AgvWorkStatus
+		}
+	}
+	return nil
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -182,24 +639,89 @@ type ServerMessage_IsFleetConnected struct {
 	IsFleetConnected bool `protobuf:"varint,3,opt,name=is_fleet_connected,json=isFleetConnected,proto3,oneof"`
 }
 
+type ServerMessage_SyncMission struct {
+	SyncMission *MissionInfo `protobuf:"bytes,4,opt,name=sync_mission,json=syncMission,proto3,oneof"`
+}
+
+type ServerMessage_AgvWorkStatus struct {
+	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,5,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsFleetConnected) isServerMessage_Payload() {}
 
+func (*ServerMessage_SyncMission) isServerMessage_Payload() {}
+
+func (*ServerMessage_AgvWorkStatus) isServerMessage_Payload() {}
+
 var File_ha_proto protoreflect.FileDescriptor
 
 const file_ha_proto_rawDesc = "" +
 	"\n" +
-	"\bha.proto\x12\x05ha_pb\",\n" +
+	"\bha.proto\x12\x05ha_pb\"\x9d\x01\n" +
+	"\vBookingInfo\x12'\n" +
+	"\x0fperipheral_type\x18\x01 \x01(\x05R\x0eperipheralType\x12\x16\n" +
+	"\x06action\x18\x02 \x01(\tR\x06action\x12\x1f\n" +
+	"\vlocation_id\x18\x03 \x01(\tR\n" +
+	"locationId\x12\x14\n" +
+	"\x05level\x18\x04 \x01(\x05R\x05level\x12\x16\n" +
+	"\x06booker\x18\x05 \x01(\tR\x06booker\"\xfa\x06\n" +
+	"\vMissionInfo\x12\x15\n" +
+	"\x06amr_id\x18\x01 \x03(\tR\x05amrId\x12\x1a\n" +
+	"\bpriority\x18\x02 \x01(\x05R\bpriority\x12\x14\n" +
+	"\x05order\x18\x03 \x01(\x05R\x05order\x12\x1b\n" +
+	"\tfull_name\x18\x04 \x03(\tR\bfullName\x12\x19\n" +
+	"\bsub_name\x18\x05 \x01(\tR\asubName\x12\x1a\n" +
+	"\bcategory\x18\x06 \x03(\tR\bcategory\x12\x1f\n" +
+	"\vis_assigned\x18\a \x01(\bR\n" +
+	"isAssigned\x12\x1f\n" +
+	"\vmanual_mode\x18\b \x01(\bR\n" +
+	"manualMode\x12#\n" +
+	"\remergency_btn\x18\t \x01(\bR\femergencyBtn\x12!\n" +
+	"\frecovery_btn\x18\n" +
+	" \x01(\bR\vrecoveryBtn\x12&\n" +
+	"\fmission_json\x18\v \x01(\tH\x00R\vmissionJson\x88\x01\x01\x12&\n" +
+	"\x0fwarning_id_list\x18\f \x03(\x05R\rwarningIdList\x12#\n" +
+	"\rcancel_reason\x18\r \x01(\x05R\fcancelReason\x12\x16\n" +
+	"\x06status\x18\x0e \x01(\x05R\x06status\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x0f \x01(\tR\tcreatedAt\x12\x1f\n" +
+	"\vassigned_at\x18\x10 \x01(\tR\n" +
+	"assignedAt\x12\x1d\n" +
+	"\n" +
+	"started_at\x18\x11 \x01(\tR\tstartedAt\x12\x19\n" +
+	"\btask_idx\x18\x12 \x01(\x05R\ataskIdx\x12!\n" +
+	"\fcompleted_at\x18\x13 \x01(\tR\vcompletedAt\x12\x18\n" +
+	"\amessage\x18\x14 \x01(\tR\amessage\x12!\n" +
+	"\fbattery_cost\x18\x15 \x01(\x02R\vbatteryCost\x126\n" +
+	"\x17total_distance_traveled\x18\x16 \x01(\x02R\x15totalDistanceTraveled\x129\n" +
+	"\x19battery_rate_when_started\x18\x17 \x01(\x02R\x16batteryRateWhenStarted\x12,\n" +
+	"\abooking\x18\x18 \x03(\v2\x12.ha_pb.BookingInfoR\abooking\x12\x1e\n" +
+	"\bcycle_id\x18\x19 \x01(\tH\x01R\acycleId\x88\x01\x01B\x0f\n" +
+	"\r_mission_jsonB\v\n" +
+	"\t_cycle_id\"\xbe\x01\n" +
+	"\rAgvWorkStatus\x12\x15\n" +
+	"\x06amr_id\x18\x01 \x01(\tR\x05amrId\x12!\n" +
+	"\fis_assigning\x18\x02 \x01(\bR\visAssigning\x12\x1f\n" +
+	"\vis_assigned\x18\x03 \x01(\bR\n" +
+	"isAssigned\x12,\n" +
+	"\x12current_mission_id\x18\x04 \x01(\tR\x10currentMissionId\x12$\n" +
+	"\x0elast_update_at\x18\x05 \x01(\tR\flastUpdateAt\"\xc4\x01\n" +
 	"\rClientMessage\x12\x10\n" +
-	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hbB\t\n" +
-	"\apayload\"\x88\x01\n" +
+	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12\x1d\n" +
+	"\tis_master\x18\x02 \x01(\bH\x00R\bisMaster\x127\n" +
+	"\fsync_mission\x18\x03 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
+	"\x0fagv_work_status\x18\x04 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
+	"\apayload\"\x81\x02\n" +
 	"\rServerMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
 	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
-	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnectedB\t\n" +
+	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x127\n" +
+	"\fsync_mission\x18\x04 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
+	"\x0fagv_work_status\x18\x05 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -216,19 +738,27 @@ func file_ha_proto_rawDescGZIP() []byte {
 	return file_ha_proto_rawDescData
 }
 
-var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_ha_proto_goTypes = []any{
-	(*ClientMessage)(nil), // 0: ha_pb.ClientMessage
-	(*ServerMessage)(nil), // 1: ha_pb.ServerMessage
+	(*BookingInfo)(nil),   // 0: ha_pb.BookingInfo
+	(*MissionInfo)(nil),   // 1: ha_pb.MissionInfo
+	(*AgvWorkStatus)(nil), // 2: ha_pb.AgvWorkStatus
+	(*ClientMessage)(nil), // 3: ha_pb.ClientMessage
+	(*ServerMessage)(nil), // 4: ha_pb.ServerMessage
 }
 var file_ha_proto_depIdxs = []int32{
-	0, // 0: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
-	1, // 1: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: ha_pb.MissionInfo.booking:type_name -> ha_pb.BookingInfo
+	1, // 1: ha_pb.ClientMessage.sync_mission:type_name -> ha_pb.MissionInfo
+	2, // 2: ha_pb.ClientMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	1, // 3: ha_pb.ServerMessage.sync_mission:type_name -> ha_pb.MissionInfo
+	2, // 4: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	3, // 5: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
+	4, // 6: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
+	6, // [6:7] is the sub-list for method output_type
+	5, // [5:6] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_ha_proto_init() }
@@ -236,13 +766,19 @@ func file_ha_proto_init() {
 	if File_ha_proto != nil {
 		return
 	}
-	file_ha_proto_msgTypes[0].OneofWrappers = []any{
+	file_ha_proto_msgTypes[1].OneofWrappers = []any{}
+	file_ha_proto_msgTypes[3].OneofWrappers = []any{
 		(*ClientMessage_Hb)(nil),
+		(*ClientMessage_IsMaster)(nil),
+		(*ClientMessage_SyncMission)(nil),
+		(*ClientMessage_AgvWorkStatus)(nil),
 	}
-	file_ha_proto_msgTypes[1].OneofWrappers = []any{
+	file_ha_proto_msgTypes[4].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
 		(*ServerMessage_IsEcsConnected)(nil),
 		(*ServerMessage_IsFleetConnected)(nil),
+		(*ServerMessage_SyncMission)(nil),
+		(*ServerMessage_AgvWorkStatus)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -250,7 +786,7 @@ func file_ha_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ha_proto_rawDesc), len(file_ha_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

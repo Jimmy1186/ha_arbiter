@@ -18,11 +18,13 @@ sudo apt install keepalived
 ## proto generate 用來生成grpc的proto
 
 protoc --proto_path=./proto \
+ --experimental_allow_proto3_optional \
  --go_out=./protoGen --go_opt=paths=source_relative \
  --go-grpc_out=./protoGen --go-grpc_opt=paths=source_relative \
  ha.proto
 
 protoc --proto_path=./proto \
+ --experimental_allow_proto3_optional \
  --go_out=./protoGen --go_opt=paths=source_relative \
  --go-grpc_out=./protoGen --go-grpc_opt=paths=source_relative \
  server.proto

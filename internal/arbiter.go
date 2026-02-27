@@ -22,6 +22,7 @@ type Arbiter struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
+	IsMaster    bool
 	Maintenance bool
 
 	lastFleetHb    time.Time
@@ -48,6 +49,7 @@ func NewArbiter(
 		ctx:    ctx,
 		cancel: cancel,
 
+		IsMaster:    false,
 		Maintenance: false,
 
 		lastFleetHb:    time.Now(),
@@ -94,6 +96,18 @@ func (a *Arbiter) StartSyncArbiter(ctx context.Context) {
 
 }
 
+func (a *Arbiter) UpdateMaster(master bool) {
+	a.mu.Lock()
+	a.IsMaster = master
+	a.mu.Unlock()
+
+	a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+		Payload: &gen.ClientMessage_IsMaster{
+			IsMaster: master,
+		},
+	})
+}
+
 func (a *Arbiter) MsgHandler() {
 	a.otherHaMsgHandler()
 	a.fleetMsgHandler()
@@ -115,6 +129,19 @@ func (a *Arbiter) otherHaMsgHandler() {
 		case *gen.StatusRequest_IsFleetConnected:
 			a.Other.Fleet = m.IsFleetConnected
 
+		case *gen.StatusRequest_SyncMission:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_SyncMission{
+					SyncMission: m.SyncMission,
+				},
+			})
+
+		case *gen.StatusRequest_AgvWorkStatus:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_AgvWorkStatus{
+					AgvWorkStatus: m.AgvWorkStatus,
+				},
+			})
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -141,7 +168,20 @@ func (a *Arbiter) fleetMsgHandler() {
 			defer a.mu.Unlock()
 			a.Self.Fleet = m.IsFleetConnected
 			log.Printf("🇦🇨 fleet status being update %v", a.Self.Fleet)
+		case *gen.ServerMessage_SyncMission:
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_SyncMission{
+					SyncMission: m.SyncMission,
+				},
+			})
+		case *gen.ServerMessage_AgvWorkStatus:
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_AgvWorkStatus{
+					AgvWorkStatus: m.AgvWorkStatus,
+				},
+			})
 		}
+
 	}
 
 }

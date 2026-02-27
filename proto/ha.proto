@@ -1,17 +1,63 @@
 syntax = "proto3";
 
-
 option go_package = "kenmec/ha/protoGen;gen";
 
 package ha_pb;
 
+message BookingInfo {
+  int32  peripheral_type = 1;
+  string action          = 2;
+  string location_id     = 3;
+  int32  level           = 4;
+  string booker          = 5;
+}
 
+// 核心任務資訊
+message MissionInfo {
+  repeated string amr_id          = 1;
+  int32           priority        = 2;
+  int32           order           = 3;
+  repeated string full_name       = 4;
+  string          sub_name        = 5;
+  repeated string category        = 6;
+  bool            is_assigned     = 7;
+  bool            manual_mode     = 8;
+  bool            emergency_btn   = 9;
+  bool            recovery_btn    = 10;
+  optional string mission_json    = 11;
+  repeated int32  warning_id_list = 12;
+  int32           cancel_reason   = 13;
+  int32           status          = 14;
+  string          created_at      = 15;
+  string          assigned_at     = 16;
+  string          started_at      = 17;
+  int32           task_idx        = 18;
+  string          completed_at    = 19;
 
+  string               message                   = 20;
+  float                battery_cost              = 21;
+  float                total_distance_traveled   = 22;
+  float                battery_rate_when_started = 23;
+  repeated BookingInfo booking                   = 24;
+  optional string      cycle_id                  = 25;
+}
+
+message AgvWorkStatus {
+  string amr_id             = 1;
+  bool   is_assigning       = 2;
+  bool   is_assigned        = 3;
+  string current_mission_id = 4;
+  string last_update_at     = 5;
+}
 
 // 從ha送過去給交管的資料
 message ClientMessage {
   oneof payload {
-    int32 hb = 1;
+    int32 hb        = 1;
+    bool  is_master = 2;
+
+    MissionInfo   sync_mission    = 3;
+    AgvWorkStatus agv_work_status = 4;
   }
 }
 
@@ -20,8 +66,11 @@ message ServerMessage {
   oneof payload {
     int32 hb = 1;
     // 啟動系統線線上後 會先發一次的狀態 交管只要有改編
-    bool is_ecs_connected = 2; 
+    bool is_ecs_connected   = 2;
     bool is_fleet_connected = 3;
+
+    MissionInfo   sync_mission    = 4;
+    AgvWorkStatus agv_work_status = 5;
   }
 }
 

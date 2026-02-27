@@ -27,7 +27,7 @@ var Cfg Config
 func init() {
 	data, err := os.ReadFile("config/config.yaml")
 	if err != nil {
-		log.Fatal("Cannot read config.yaml:", err)
+		log.Fatal("Cannot read config.yaml 自己去建立一個config.yaml:", err)
 	}
 
 	if err := yaml.Unmarshal(data, &Cfg); err != nil {
