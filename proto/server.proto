@@ -22,6 +22,7 @@ message StatusRequest {
     PeerArbiter         peer_arbiter    = 5;
     ha_pb.MissionInfo   sync_mission    = 6;
     ha_pb.AgvWorkStatus agv_work_status = 7;
+    ha_pb.MissionReport mission_report  = 8;
   }
 }
 
@@ -36,6 +37,7 @@ message StatusResponse {
     PeerArbiter         peer_arbiter    = 5;
     ha_pb.MissionInfo   sync_mission    = 6;
     ha_pb.AgvWorkStatus agv_work_status = 7;
+    ha_pb.MissionReport mission_report  = 8;
   }
 }
 

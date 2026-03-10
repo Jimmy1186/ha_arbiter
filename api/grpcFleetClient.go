@@ -119,7 +119,7 @@ func (g *GRPCFleetClient) ReceiveMessageFromFleet() {
 			break
 		}
 
-		log.Printf("📨 收到訊息來自交管: %+v", msg)
+		// log.Printf("📨 收到訊息來自交管: %+v", msg)
 		g.OnReceiveMsg(msg)
 	}
 }

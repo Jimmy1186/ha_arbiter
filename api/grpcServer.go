@@ -107,7 +107,7 @@ func (s *HAToOtherServer) ExchangeStatus(stream pb.HASyncService_ExchangeStatusS
 			log.Printf("❌ 客戶端 %s 接收錯誤: %v", clientID, err)
 			return err
 		}
-		log.Printf("📨 收到訊息來自另一台 HA: %+v", msg)
+
 		s.handleClientMessage(msg)
 	}
 }

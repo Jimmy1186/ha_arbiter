@@ -50,6 +50,15 @@ message AgvWorkStatus {
   string last_update_at     = 5;
 }
 
+message MissionReport {
+  string         report_type = 1;
+  string         mission_id  = 2;
+  string         amr_id      = 3;
+  optional int32 distance    = 4;
+  optional bool  is_abort    = 5;
+  optional int32 step        = 6;
+}
+
 // 從ha送過去給交管的資料
 message ClientMessage {
   oneof payload {
@@ -58,6 +67,7 @@ message ClientMessage {
 
     MissionInfo   sync_mission    = 3;
     AgvWorkStatus agv_work_status = 4;
+    MissionReport mission_report  = 5;
   }
 }
 
@@ -71,6 +81,7 @@ message ServerMessage {
 
     MissionInfo   sync_mission    = 4;
     AgvWorkStatus agv_work_status = 5;
+    MissionReport mission_report  = 6;
   }
 }
 

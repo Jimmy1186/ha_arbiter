@@ -93,6 +93,7 @@ type StatusRequest struct {
 	//	*StatusRequest_PeerArbiter
 	//	*StatusRequest_SyncMission
 	//	*StatusRequest_AgvWorkStatus
+	//	*StatusRequest_MissionReport
 	Payload       isStatusRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -198,6 +199,15 @@ func (x *StatusRequest) GetAgvWorkStatus() *AgvWorkStatus {
 	return nil
 }
 
+func (x *StatusRequest) GetMissionReport() *MissionReport {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_MissionReport); ok {
+			return x.MissionReport
+		}
+	}
+	return nil
+}
+
 type isStatusRequest_Payload interface {
 	isStatusRequest_Payload()
 }
@@ -230,6 +240,10 @@ type StatusRequest_AgvWorkStatus struct {
 	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,7,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
 }
 
+type StatusRequest_MissionReport struct {
+	MissionReport *MissionReport `protobuf:"bytes,8,opt,name=mission_report,json=missionReport,proto3,oneof"`
+}
+
 func (*StatusRequest_Hb) isStatusRequest_Payload() {}
 
 func (*StatusRequest_IsHaConnected) isStatusRequest_Payload() {}
@@ -244,6 +258,8 @@ func (*StatusRequest_SyncMission) isStatusRequest_Payload() {}
 
 func (*StatusRequest_AgvWorkStatus) isStatusRequest_Payload() {}
 
+func (*StatusRequest_MissionReport) isStatusRequest_Payload() {}
+
 // 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
 type StatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -256,6 +272,7 @@ type StatusResponse struct {
 	//	*StatusResponse_PeerArbiter
 	//	*StatusResponse_SyncMission
 	//	*StatusResponse_AgvWorkStatus
+	//	*StatusResponse_MissionReport
 	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -361,6 +378,15 @@ func (x *StatusResponse) GetAgvWorkStatus() *AgvWorkStatus {
 	return nil
 }
 
+func (x *StatusResponse) GetMissionReport() *MissionReport {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_MissionReport); ok {
+			return x.MissionReport
+		}
+	}
+	return nil
+}
+
 type isStatusResponse_Payload interface {
 	isStatusResponse_Payload()
 }
@@ -393,6 +419,10 @@ type StatusResponse_AgvWorkStatus struct {
 	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,7,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
 }
 
+type StatusResponse_MissionReport struct {
+	MissionReport *MissionReport `protobuf:"bytes,8,opt,name=mission_report,json=missionReport,proto3,oneof"`
+}
+
 func (*StatusResponse_Hb) isStatusResponse_Payload() {}
 
 func (*StatusResponse_IsHaConnected) isStatusResponse_Payload() {}
@@ -407,6 +437,8 @@ func (*StatusResponse_SyncMission) isStatusResponse_Payload() {}
 
 func (*StatusResponse_AgvWorkStatus) isStatusResponse_Payload() {}
 
+func (*StatusResponse_MissionReport) isStatusResponse_Payload() {}
+
 var File_server_proto protoreflect.FileDescriptor
 
 const file_server_proto_rawDesc = "" +
@@ -416,7 +448,7 @@ const file_server_proto_rawDesc = "" +
 	"\vPeerArbiter\x12\x10\n" +
 	"\x03ecs\x18\x01 \x01(\bR\x03ecs\x12\x14\n" +
 	"\x05fleet\x18\x02 \x01(\bR\x05fleet\x12\x0e\n" +
-	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xe9\x02\n" +
+	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xa8\x03\n" +
 	"\rStatusRequest\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -424,8 +456,9 @@ const file_server_proto_rawDesc = "" +
 	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnected\x12<\n" +
 	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
 	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
-	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
-	"\apayload\"\xea\x02\n" +
+	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
+	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
+	"\apayload\"\xa9\x03\n" +
 	"\x0eStatusResponse\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -433,7 +466,8 @@ const file_server_proto_rawDesc = "" +
 	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnected\x12<\n" +
 	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
 	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
-	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
+	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
+	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
 	"\apayload2\\\n" +
 	"\rHASyncService\x12K\n" +
 	"\x0eExchangeStatus\x12\x19.ha_sync_pb.StatusRequest\x1a\x1a.ha_sync_pb.StatusResponse(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -457,21 +491,24 @@ var file_server_proto_goTypes = []any{
 	(*StatusResponse)(nil), // 2: ha_sync_pb.StatusResponse
 	(*MissionInfo)(nil),    // 3: ha_pb.MissionInfo
 	(*AgvWorkStatus)(nil),  // 4: ha_pb.AgvWorkStatus
+	(*MissionReport)(nil),  // 5: ha_pb.MissionReport
 }
 var file_server_proto_depIdxs = []int32{
 	0, // 0: ha_sync_pb.StatusRequest.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
 	3, // 1: ha_sync_pb.StatusRequest.sync_mission:type_name -> ha_pb.MissionInfo
 	4, // 2: ha_sync_pb.StatusRequest.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	0, // 3: ha_sync_pb.StatusResponse.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
-	3, // 4: ha_sync_pb.StatusResponse.sync_mission:type_name -> ha_pb.MissionInfo
-	4, // 5: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	1, // 6: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
-	2, // 7: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
-	7, // [7:8] is the sub-list for method output_type
-	6, // [6:7] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	5, // 3: ha_sync_pb.StatusRequest.mission_report:type_name -> ha_pb.MissionReport
+	0, // 4: ha_sync_pb.StatusResponse.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
+	3, // 5: ha_sync_pb.StatusResponse.sync_mission:type_name -> ha_pb.MissionInfo
+	4, // 6: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	5, // 7: ha_sync_pb.StatusResponse.mission_report:type_name -> ha_pb.MissionReport
+	1, // 8: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
+	2, // 9: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
+	9, // [9:10] is the sub-list for method output_type
+	8, // [8:9] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_server_proto_init() }
@@ -488,6 +525,7 @@ func file_server_proto_init() {
 		(*StatusRequest_PeerArbiter)(nil),
 		(*StatusRequest_SyncMission)(nil),
 		(*StatusRequest_AgvWorkStatus)(nil),
+		(*StatusRequest_MissionReport)(nil),
 	}
 	file_server_proto_msgTypes[2].OneofWrappers = []any{
 		(*StatusResponse_Hb)(nil),
@@ -497,6 +535,7 @@ func file_server_proto_init() {
 		(*StatusResponse_PeerArbiter)(nil),
 		(*StatusResponse_SyncMission)(nil),
 		(*StatusResponse_AgvWorkStatus)(nil),
+		(*StatusResponse_MissionReport)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

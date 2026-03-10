@@ -142,6 +142,14 @@ func (a *Arbiter) otherHaMsgHandler() {
 					AgvWorkStatus: m.AgvWorkStatus,
 				},
 			})
+
+		case *gen.StatusRequest_MissionReport:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_MissionReport{
+					MissionReport: m.MissionReport,
+				},
+			})
+
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -152,38 +160,68 @@ func (a *Arbiter) otherHaMsgHandler() {
 // 接收來自交管資料
 func (a *Arbiter) fleetMsgHandler() {
 	a.fleetClient.OnReceiveMsg = func(msg *gen.ServerMessage) {
+		// 先檢查 payload 是否為空
+		if msg.Payload == nil {
+			log.Printf("⚠️ 收到空的 ServerMessage")
+			return
+		}
+
 		switch m := msg.Payload.(type) {
 		case *gen.ServerMessage_Hb:
 			a.mu.Lock()
 			a.lastFleetHb = time.Now()
 			a.mu.Unlock()
+
 		case *gen.ServerMessage_IsEcsConnected:
 			a.mu.Lock()
 			a.Self.ECS = m.IsEcsConnected
 			a.mu.Unlock()
-			log.Printf("🛐 ecs status being update %v", a.Self.ECS)
+			log.Printf("🌐 [網路狀態] ECS 連線變更: %v", m.IsEcsConnected)
+
 		case *gen.ServerMessage_IsFleetConnected:
 			a.fleetClient.UpdateConnectStatus(m.IsFleetConnected)
 			a.mu.Lock()
-			defer a.mu.Unlock()
 			a.Self.Fleet = m.IsFleetConnected
-			log.Printf("🇦🇨 fleet status being update %v", a.Self.Fleet)
+			a.mu.Unlock()
+			log.Printf("🚚 [網路狀態] Fleet 連線變更: %v", m.IsFleetConnected)
+
 		case *gen.ServerMessage_SyncMission:
+			info := m.SyncMission
+			log.Printf("📋 [任務同步] 收到任務: %s (狀態: %v)",
+				info.SubName, info.Status)
+
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_SyncMission{
-					SyncMission: m.SyncMission,
+					SyncMission: info,
 				},
 			})
+
 		case *gen.ServerMessage_AgvWorkStatus:
+			status := m.AgvWorkStatus
+			log.Printf("🤖 [車輛狀態] AMR: %s (正在指派: %v, 指派中任務: %s)",
+				status.AmrId, status.IsAssigning, status.CurrentMissionId)
+
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_AgvWorkStatus{
-					AgvWorkStatus: m.AgvWorkStatus,
+					AgvWorkStatus: status,
 				},
 			})
+
+		case *gen.ServerMessage_MissionReport:
+			report := m.MissionReport
+			log.Printf("📊 [任務報表] 類型: %s, 任務ID: %s, AMR: %s, 步驟: %d",
+				report.ReportType, report.MissionId, report.AmrId, report.GetStep())
+
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_MissionReport{
+					MissionReport: report,
+				},
+			})
+
+		default:
+			log.Printf("❓ [未知訊息] 收到未定義的 Payload 類型: %T", m)
 		}
-
 	}
-
 }
 
 // 監測與交管心跳是否有延遲

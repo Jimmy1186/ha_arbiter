@@ -410,6 +410,90 @@ func (x *AgvWorkStatus) GetLastUpdateAt() string {
 	return ""
 }
 
+type MissionReport struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ReportType    string                 `protobuf:"bytes,1,opt,name=report_type,json=reportType,proto3" json:"report_type,omitempty"`
+	MissionId     string                 `protobuf:"bytes,2,opt,name=mission_id,json=missionId,proto3" json:"mission_id,omitempty"`
+	AmrId         string                 `protobuf:"bytes,3,opt,name=amr_id,json=amrId,proto3" json:"amr_id,omitempty"`
+	Distance      *int32                 `protobuf:"varint,4,opt,name=distance,proto3,oneof" json:"distance,omitempty"`
+	IsAbort       *bool                  `protobuf:"varint,5,opt,name=is_abort,json=isAbort,proto3,oneof" json:"is_abort,omitempty"`
+	Step          *int32                 `protobuf:"varint,6,opt,name=step,proto3,oneof" json:"step,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MissionReport) Reset() {
+	*x = MissionReport{}
+	mi := &file_ha_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MissionReport) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MissionReport) ProtoMessage() {}
+
+func (x *MissionReport) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MissionReport.ProtoReflect.Descriptor instead.
+func (*MissionReport) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *MissionReport) GetReportType() string {
+	if x != nil {
+		return x.ReportType
+	}
+	return ""
+}
+
+func (x *MissionReport) GetMissionId() string {
+	if x != nil {
+		return x.MissionId
+	}
+	return ""
+}
+
+func (x *MissionReport) GetAmrId() string {
+	if x != nil {
+		return x.AmrId
+	}
+	return ""
+}
+
+func (x *MissionReport) GetDistance() int32 {
+	if x != nil && x.Distance != nil {
+		return *x.Distance
+	}
+	return 0
+}
+
+func (x *MissionReport) GetIsAbort() bool {
+	if x != nil && x.IsAbort != nil {
+		return *x.IsAbort
+	}
+	return false
+}
+
+func (x *MissionReport) GetStep() int32 {
+	if x != nil && x.Step != nil {
+		return *x.Step
+	}
+	return 0
+}
+
 // 從ha送過去給交管的資料
 type ClientMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -419,6 +503,7 @@ type ClientMessage struct {
 	//	*ClientMessage_IsMaster
 	//	*ClientMessage_SyncMission
 	//	*ClientMessage_AgvWorkStatus
+	//	*ClientMessage_MissionReport
 	Payload       isClientMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -426,7 +511,7 @@ type ClientMessage struct {
 
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
-	mi := &file_ha_proto_msgTypes[3]
+	mi := &file_ha_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -438,7 +523,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[3]
+	mi := &file_ha_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -451,7 +536,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{3}
+	return file_ha_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ClientMessage) GetPayload() isClientMessage_Payload {
@@ -497,6 +582,15 @@ func (x *ClientMessage) GetAgvWorkStatus() *AgvWorkStatus {
 	return nil
 }
 
+func (x *ClientMessage) GetMissionReport() *MissionReport {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_MissionReport); ok {
+			return x.MissionReport
+		}
+	}
+	return nil
+}
+
 type isClientMessage_Payload interface {
 	isClientMessage_Payload()
 }
@@ -517,6 +611,10 @@ type ClientMessage_AgvWorkStatus struct {
 	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,4,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
 }
 
+type ClientMessage_MissionReport struct {
+	MissionReport *MissionReport `protobuf:"bytes,5,opt,name=mission_report,json=missionReport,proto3,oneof"`
+}
+
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
 
 func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
@@ -524,6 +622,8 @@ func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
 func (*ClientMessage_SyncMission) isClientMessage_Payload() {}
 
 func (*ClientMessage_AgvWorkStatus) isClientMessage_Payload() {}
+
+func (*ClientMessage_MissionReport) isClientMessage_Payload() {}
 
 // 從交管送過來的資料
 type ServerMessage struct {
@@ -535,6 +635,7 @@ type ServerMessage struct {
 	//	*ServerMessage_IsFleetConnected
 	//	*ServerMessage_SyncMission
 	//	*ServerMessage_AgvWorkStatus
+	//	*ServerMessage_MissionReport
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -542,7 +643,7 @@ type ServerMessage struct {
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
-	mi := &file_ha_proto_msgTypes[4]
+	mi := &file_ha_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -554,7 +655,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[4]
+	mi := &file_ha_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -567,7 +668,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{4}
+	return file_ha_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ServerMessage) GetPayload() isServerMessage_Payload {
@@ -622,6 +723,15 @@ func (x *ServerMessage) GetAgvWorkStatus() *AgvWorkStatus {
 	return nil
 }
 
+func (x *ServerMessage) GetMissionReport() *MissionReport {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_MissionReport); ok {
+			return x.MissionReport
+		}
+	}
+	return nil
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -647,6 +757,10 @@ type ServerMessage_AgvWorkStatus struct {
 	AgvWorkStatus *AgvWorkStatus `protobuf:"bytes,5,opt,name=agv_work_status,json=agvWorkStatus,proto3,oneof"`
 }
 
+type ServerMessage_MissionReport struct {
+	MissionReport *MissionReport `protobuf:"bytes,6,opt,name=mission_report,json=missionReport,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
@@ -656,6 +770,8 @@ func (*ServerMessage_IsFleetConnected) isServerMessage_Payload() {}
 func (*ServerMessage_SyncMission) isServerMessage_Payload() {}
 
 func (*ServerMessage_AgvWorkStatus) isServerMessage_Payload() {}
+
+func (*ServerMessage_MissionReport) isServerMessage_Payload() {}
 
 var File_ha_proto protoreflect.FileDescriptor
 
@@ -709,19 +825,33 @@ const file_ha_proto_rawDesc = "" +
 	"\vis_assigned\x18\x03 \x01(\bR\n" +
 	"isAssigned\x12,\n" +
 	"\x12current_mission_id\x18\x04 \x01(\tR\x10currentMissionId\x12$\n" +
-	"\x0elast_update_at\x18\x05 \x01(\tR\flastUpdateAt\"\xc4\x01\n" +
+	"\x0elast_update_at\x18\x05 \x01(\tR\flastUpdateAt\"\xe3\x01\n" +
+	"\rMissionReport\x12\x1f\n" +
+	"\vreport_type\x18\x01 \x01(\tR\n" +
+	"reportType\x12\x1d\n" +
+	"\n" +
+	"mission_id\x18\x02 \x01(\tR\tmissionId\x12\x15\n" +
+	"\x06amr_id\x18\x03 \x01(\tR\x05amrId\x12\x1f\n" +
+	"\bdistance\x18\x04 \x01(\x05H\x00R\bdistance\x88\x01\x01\x12\x1e\n" +
+	"\bis_abort\x18\x05 \x01(\bH\x01R\aisAbort\x88\x01\x01\x12\x17\n" +
+	"\x04step\x18\x06 \x01(\x05H\x02R\x04step\x88\x01\x01B\v\n" +
+	"\t_distanceB\v\n" +
+	"\t_is_abortB\a\n" +
+	"\x05_step\"\x83\x02\n" +
 	"\rClientMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12\x1d\n" +
 	"\tis_master\x18\x02 \x01(\bH\x00R\bisMaster\x127\n" +
 	"\fsync_mission\x18\x03 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
-	"\x0fagv_work_status\x18\x04 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
-	"\apayload\"\x81\x02\n" +
+	"\x0fagv_work_status\x18\x04 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
+	"\x0emission_report\x18\x05 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
+	"\apayload\"\xc0\x02\n" +
 	"\rServerMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
 	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
 	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x127\n" +
 	"\fsync_mission\x18\x04 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
-	"\x0fagv_work_status\x18\x05 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatusB\t\n" +
+	"\x0fagv_work_status\x18\x05 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
+	"\x0emission_report\x18\x06 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -738,27 +868,30 @@ func file_ha_proto_rawDescGZIP() []byte {
 	return file_ha_proto_rawDescData
 }
 
-var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_ha_proto_goTypes = []any{
 	(*BookingInfo)(nil),   // 0: ha_pb.BookingInfo
 	(*MissionInfo)(nil),   // 1: ha_pb.MissionInfo
 	(*AgvWorkStatus)(nil), // 2: ha_pb.AgvWorkStatus
-	(*ClientMessage)(nil), // 3: ha_pb.ClientMessage
-	(*ServerMessage)(nil), // 4: ha_pb.ServerMessage
+	(*MissionReport)(nil), // 3: ha_pb.MissionReport
+	(*ClientMessage)(nil), // 4: ha_pb.ClientMessage
+	(*ServerMessage)(nil), // 5: ha_pb.ServerMessage
 }
 var file_ha_proto_depIdxs = []int32{
 	0, // 0: ha_pb.MissionInfo.booking:type_name -> ha_pb.BookingInfo
 	1, // 1: ha_pb.ClientMessage.sync_mission:type_name -> ha_pb.MissionInfo
 	2, // 2: ha_pb.ClientMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	1, // 3: ha_pb.ServerMessage.sync_mission:type_name -> ha_pb.MissionInfo
-	2, // 4: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	3, // 5: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
-	4, // 6: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
-	6, // [6:7] is the sub-list for method output_type
-	5, // [5:6] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	3, // 3: ha_pb.ClientMessage.mission_report:type_name -> ha_pb.MissionReport
+	1, // 4: ha_pb.ServerMessage.sync_mission:type_name -> ha_pb.MissionInfo
+	2, // 5: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	3, // 6: ha_pb.ServerMessage.mission_report:type_name -> ha_pb.MissionReport
+	4, // 7: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
+	5, // 8: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
+	8, // [8:9] is the sub-list for method output_type
+	7, // [7:8] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_ha_proto_init() }
@@ -767,18 +900,21 @@ func file_ha_proto_init() {
 		return
 	}
 	file_ha_proto_msgTypes[1].OneofWrappers = []any{}
-	file_ha_proto_msgTypes[3].OneofWrappers = []any{
+	file_ha_proto_msgTypes[3].OneofWrappers = []any{}
+	file_ha_proto_msgTypes[4].OneofWrappers = []any{
 		(*ClientMessage_Hb)(nil),
 		(*ClientMessage_IsMaster)(nil),
 		(*ClientMessage_SyncMission)(nil),
 		(*ClientMessage_AgvWorkStatus)(nil),
+		(*ClientMessage_MissionReport)(nil),
 	}
-	file_ha_proto_msgTypes[4].OneofWrappers = []any{
+	file_ha_proto_msgTypes[5].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
 		(*ServerMessage_IsEcsConnected)(nil),
 		(*ServerMessage_IsFleetConnected)(nil),
 		(*ServerMessage_SyncMission)(nil),
 		(*ServerMessage_AgvWorkStatus)(nil),
+		(*ServerMessage_MissionReport)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -786,7 +922,7 @@ func file_ha_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ha_proto_rawDesc), len(file_ha_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
