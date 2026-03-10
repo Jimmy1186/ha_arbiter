@@ -27,7 +27,8 @@ type GRPCFleetClient struct {
 	isConnected    bool
 
 	//用類似callback的方式 可以在其他地方呼叫用
-	OnReceiveMsg func(msg *pb.ServerMessage)
+	OnReceiveMsg     func(msg *pb.ServerMessage)
+	OnFleetConnected func()
 }
 
 func NewGRPCFleetClient(address string) *GRPCFleetClient {
@@ -78,7 +79,9 @@ func (g *GRPCFleetClient) ConneectToFleet() error {
 		return err
 	}
 	g.stream = stream
-
+	if g.OnFleetConnected != nil {
+		go g.OnFleetConnected()
+	}
 	log.Println("✅ gRPC 連線成功")
 	return nil
 }

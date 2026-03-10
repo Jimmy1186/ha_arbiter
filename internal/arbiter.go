@@ -7,6 +7,7 @@ import (
 	"kenmec/ha/jimmy/config"
 	gen "kenmec/ha/jimmy/protoGen"
 	"log"
+	"net"
 	"sync"
 	"time"
 )
@@ -100,7 +101,6 @@ func (a *Arbiter) UpdateMaster(master bool) {
 	a.mu.Lock()
 	a.IsMaster = master
 	a.mu.Unlock()
-
 	a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
 		Payload: &gen.ClientMessage_IsMaster{
 			IsMaster: master,
@@ -111,6 +111,7 @@ func (a *Arbiter) UpdateMaster(master bool) {
 func (a *Arbiter) MsgHandler() {
 	a.otherHaMsgHandler()
 	a.fleetMsgHandler()
+	a.whenFleetConnect()
 }
 
 // 接收來自其他的HA的資料
@@ -154,6 +155,12 @@ func (a *Arbiter) otherHaMsgHandler() {
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
 
+	}
+}
+
+func (a *Arbiter) whenFleetConnect() {
+	a.fleetClient.OnFleetConnected = func() {
+		a.UpdateMaster(a.IsMaster)
 	}
 }
 
@@ -301,4 +308,38 @@ func (a *Arbiter) StartOtherHaHbMonitor() {
 			}
 		}
 	}
+}
+
+func (a *Arbiter) CheckInitRole() {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		log.Printf("❌ 無法取得網卡資訊: %v", err)
+		return
+	}
+
+	for _, addr := range addrs {
+
+		if ipnet, ok := addr.(*net.IPNet); ok {
+
+			if ipnet.IP.IsLoopback() {
+				continue
+			}
+
+			ip := ipnet.IP.To4()
+			if ip == nil {
+				continue
+			}
+
+			fmt.Printf("🔍 偵測到本機 IP: %s\n", ip.String())
+
+			if ip.String() == config.Cfg.VIP {
+				log.Printf("👑 [啟動檢查] 發現 VIP (%s)，身分確認為: MASTER", config.Cfg.VIP)
+				a.UpdateMaster(true)
+				return
+			}
+		}
+	}
+
+	log.Printf("🥈 [啟動檢查] 未發現 VIP (%s)，身分確認為: BACKUP", config.Cfg.VIP)
+	a.UpdateMaster(false)
 }

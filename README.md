@@ -32,3 +32,9 @@ protoc --proto_path=./proto \
 ## schema
 
 mysqldump -u root -p --no-data corning_v2 > schema.sql
+
+sudo systemctl status keepalived.service
+sudo systemctl stop keepalived.service
+sudo systemctl status keepalived.service
+
+journalctl -u keepalived.service -f

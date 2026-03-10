@@ -23,6 +23,7 @@ func main() {
 	go haClient.LoggingConnectionStatus()
 
 	arbiter := internal.NewArbiter(grpcFleetClient, haClient, haServer)
+	arbiter.CheckInitRole()
 	go arbiter.MsgHandler()
 	go arbiter.StartHeartbeatToOtherHA()
 	go arbiter.StartFleetHbMonitor()

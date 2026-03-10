@@ -14,6 +14,8 @@ type Config struct {
 	OTHER_HA_HB_INTERVAL int32 `yaml:"OTHER_HA_HB_INTERVAL"`
 	OTHER_HA_HB_TIMEOUT  int32 `yaml:"OTHER_HA_HB_TIMEOUT"`
 
+	VIP string `yaml:"VIP"`
+
 	SERVER_IP   string `yaml:"SERVER_IP"`
 	SERVER_PORT string `yaml:"SERVER_PORT"`
 	CLIENT_IP   string `yaml:"CLIENT_IP"`
