@@ -94,6 +94,9 @@ type StatusRequest struct {
 	//	*StatusRequest_SyncMission
 	//	*StatusRequest_AgvWorkStatus
 	//	*StatusRequest_MissionReport
+	//	*StatusRequest_UpdateCargoInfo
+	//	*StatusRequest_SaveCargoInfo
+	//	*StatusRequest_UpdateAmrCargoInfo
 	Payload       isStatusRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -208,6 +211,33 @@ func (x *StatusRequest) GetMissionReport() *MissionReport {
 	return nil
 }
 
+func (x *StatusRequest) GetUpdateCargoInfo() *UpdateCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_UpdateCargoInfo); ok {
+			return x.UpdateCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *StatusRequest) GetSaveCargoInfo() *SaveCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_SaveCargoInfo); ok {
+			return x.SaveCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *StatusRequest) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_UpdateAmrCargoInfo); ok {
+			return x.UpdateAmrCargoInfo
+		}
+	}
+	return nil
+}
+
 type isStatusRequest_Payload interface {
 	isStatusRequest_Payload()
 }
@@ -244,6 +274,18 @@ type StatusRequest_MissionReport struct {
 	MissionReport *MissionReport `protobuf:"bytes,8,opt,name=mission_report,json=missionReport,proto3,oneof"`
 }
 
+type StatusRequest_UpdateCargoInfo struct {
+	UpdateCargoInfo *UpdateCargoInfo `protobuf:"bytes,9,opt,name=update_cargo_info,json=updateCargoInfo,proto3,oneof"`
+}
+
+type StatusRequest_SaveCargoInfo struct {
+	SaveCargoInfo *SaveCargoInfo `protobuf:"bytes,10,opt,name=save_cargo_info,json=saveCargoInfo,proto3,oneof"`
+}
+
+type StatusRequest_UpdateAmrCargoInfo struct {
+	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,11,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
 func (*StatusRequest_Hb) isStatusRequest_Payload() {}
 
 func (*StatusRequest_IsHaConnected) isStatusRequest_Payload() {}
@@ -260,6 +302,12 @@ func (*StatusRequest_AgvWorkStatus) isStatusRequest_Payload() {}
 
 func (*StatusRequest_MissionReport) isStatusRequest_Payload() {}
 
+func (*StatusRequest_UpdateCargoInfo) isStatusRequest_Payload() {}
+
+func (*StatusRequest_SaveCargoInfo) isStatusRequest_Payload() {}
+
+func (*StatusRequest_UpdateAmrCargoInfo) isStatusRequest_Payload() {}
+
 // 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
 type StatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -273,6 +321,9 @@ type StatusResponse struct {
 	//	*StatusResponse_SyncMission
 	//	*StatusResponse_AgvWorkStatus
 	//	*StatusResponse_MissionReport
+	//	*StatusResponse_UpdateCargoInfo
+	//	*StatusResponse_SaveCargoInfo
+	//	*StatusResponse_UpdateAmrCargoInfo
 	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -387,6 +438,33 @@ func (x *StatusResponse) GetMissionReport() *MissionReport {
 	return nil
 }
 
+func (x *StatusResponse) GetUpdateCargoInfo() *UpdateCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_UpdateCargoInfo); ok {
+			return x.UpdateCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetSaveCargoInfo() *SaveCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_SaveCargoInfo); ok {
+			return x.SaveCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_UpdateAmrCargoInfo); ok {
+			return x.UpdateAmrCargoInfo
+		}
+	}
+	return nil
+}
+
 type isStatusResponse_Payload interface {
 	isStatusResponse_Payload()
 }
@@ -423,6 +501,18 @@ type StatusResponse_MissionReport struct {
 	MissionReport *MissionReport `protobuf:"bytes,8,opt,name=mission_report,json=missionReport,proto3,oneof"`
 }
 
+type StatusResponse_UpdateCargoInfo struct {
+	UpdateCargoInfo *UpdateCargoInfo `protobuf:"bytes,9,opt,name=update_cargo_info,json=updateCargoInfo,proto3,oneof"`
+}
+
+type StatusResponse_SaveCargoInfo struct {
+	SaveCargoInfo *SaveCargoInfo `protobuf:"bytes,10,opt,name=save_cargo_info,json=saveCargoInfo,proto3,oneof"`
+}
+
+type StatusResponse_UpdateAmrCargoInfo struct {
+	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,11,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
 func (*StatusResponse_Hb) isStatusResponse_Payload() {}
 
 func (*StatusResponse_IsHaConnected) isStatusResponse_Payload() {}
@@ -439,6 +529,12 @@ func (*StatusResponse_AgvWorkStatus) isStatusResponse_Payload() {}
 
 func (*StatusResponse_MissionReport) isStatusResponse_Payload() {}
 
+func (*StatusResponse_UpdateCargoInfo) isStatusResponse_Payload() {}
+
+func (*StatusResponse_SaveCargoInfo) isStatusResponse_Payload() {}
+
+func (*StatusResponse_UpdateAmrCargoInfo) isStatusResponse_Payload() {}
+
 var File_server_proto protoreflect.FileDescriptor
 
 const file_server_proto_rawDesc = "" +
@@ -448,7 +544,7 @@ const file_server_proto_rawDesc = "" +
 	"\vPeerArbiter\x12\x10\n" +
 	"\x03ecs\x18\x01 \x01(\bR\x03ecs\x12\x14\n" +
 	"\x05fleet\x18\x02 \x01(\bR\x05fleet\x12\x0e\n" +
-	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xa8\x03\n" +
+	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xfe\x04\n" +
 	"\rStatusRequest\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -457,8 +553,12 @@ const file_server_proto_rawDesc = "" +
 	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
 	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
-	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
-	"\apayload\"\xa9\x03\n" +
+	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
+	"\x11update_cargo_info\x18\t \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
+	"\x0fsave_cargo_info\x18\n" +
+	" \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
+	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
+	"\apayload\"\xff\x04\n" +
 	"\x0eStatusResponse\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -467,7 +567,11 @@ const file_server_proto_rawDesc = "" +
 	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
 	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
-	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
+	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
+	"\x11update_cargo_info\x18\t \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
+	"\x0fsave_cargo_info\x18\n" +
+	" \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
+	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
 	"\apayload2\\\n" +
 	"\rHASyncService\x12K\n" +
 	"\x0eExchangeStatus\x12\x19.ha_sync_pb.StatusRequest\x1a\x1a.ha_sync_pb.StatusResponse(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -486,29 +590,38 @@ func file_server_proto_rawDescGZIP() []byte {
 
 var file_server_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_server_proto_goTypes = []any{
-	(*PeerArbiter)(nil),    // 0: ha_sync_pb.PeerArbiter
-	(*StatusRequest)(nil),  // 1: ha_sync_pb.StatusRequest
-	(*StatusResponse)(nil), // 2: ha_sync_pb.StatusResponse
-	(*MissionInfo)(nil),    // 3: ha_pb.MissionInfo
-	(*AgvWorkStatus)(nil),  // 4: ha_pb.AgvWorkStatus
-	(*MissionReport)(nil),  // 5: ha_pb.MissionReport
+	(*PeerArbiter)(nil),        // 0: ha_sync_pb.PeerArbiter
+	(*StatusRequest)(nil),      // 1: ha_sync_pb.StatusRequest
+	(*StatusResponse)(nil),     // 2: ha_sync_pb.StatusResponse
+	(*MissionInfo)(nil),        // 3: ha_pb.MissionInfo
+	(*AgvWorkStatus)(nil),      // 4: ha_pb.AgvWorkStatus
+	(*MissionReport)(nil),      // 5: ha_pb.MissionReport
+	(*UpdateCargoInfo)(nil),    // 6: ha_pb.UpdateCargoInfo
+	(*SaveCargoInfo)(nil),      // 7: ha_pb.SaveCargoInfo
+	(*UpdateAmrCargoInfo)(nil), // 8: ha_pb.UpdateAmrCargoInfo
 }
 var file_server_proto_depIdxs = []int32{
-	0, // 0: ha_sync_pb.StatusRequest.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
-	3, // 1: ha_sync_pb.StatusRequest.sync_mission:type_name -> ha_pb.MissionInfo
-	4, // 2: ha_sync_pb.StatusRequest.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	5, // 3: ha_sync_pb.StatusRequest.mission_report:type_name -> ha_pb.MissionReport
-	0, // 4: ha_sync_pb.StatusResponse.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
-	3, // 5: ha_sync_pb.StatusResponse.sync_mission:type_name -> ha_pb.MissionInfo
-	4, // 6: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	5, // 7: ha_sync_pb.StatusResponse.mission_report:type_name -> ha_pb.MissionReport
-	1, // 8: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
-	2, // 9: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
-	9, // [9:10] is the sub-list for method output_type
-	8, // [8:9] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	0,  // 0: ha_sync_pb.StatusRequest.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
+	3,  // 1: ha_sync_pb.StatusRequest.sync_mission:type_name -> ha_pb.MissionInfo
+	4,  // 2: ha_sync_pb.StatusRequest.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	5,  // 3: ha_sync_pb.StatusRequest.mission_report:type_name -> ha_pb.MissionReport
+	6,  // 4: ha_sync_pb.StatusRequest.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	7,  // 5: ha_sync_pb.StatusRequest.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	8,  // 6: ha_sync_pb.StatusRequest.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	0,  // 7: ha_sync_pb.StatusResponse.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
+	3,  // 8: ha_sync_pb.StatusResponse.sync_mission:type_name -> ha_pb.MissionInfo
+	4,  // 9: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	5,  // 10: ha_sync_pb.StatusResponse.mission_report:type_name -> ha_pb.MissionReport
+	6,  // 11: ha_sync_pb.StatusResponse.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	7,  // 12: ha_sync_pb.StatusResponse.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	8,  // 13: ha_sync_pb.StatusResponse.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	1,  // 14: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
+	2,  // 15: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
+	15, // [15:16] is the sub-list for method output_type
+	14, // [14:15] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_server_proto_init() }
@@ -526,6 +639,9 @@ func file_server_proto_init() {
 		(*StatusRequest_SyncMission)(nil),
 		(*StatusRequest_AgvWorkStatus)(nil),
 		(*StatusRequest_MissionReport)(nil),
+		(*StatusRequest_UpdateCargoInfo)(nil),
+		(*StatusRequest_SaveCargoInfo)(nil),
+		(*StatusRequest_UpdateAmrCargoInfo)(nil),
 	}
 	file_server_proto_msgTypes[2].OneofWrappers = []any{
 		(*StatusResponse_Hb)(nil),
@@ -536,6 +652,9 @@ func file_server_proto_init() {
 		(*StatusResponse_SyncMission)(nil),
 		(*StatusResponse_AgvWorkStatus)(nil),
 		(*StatusResponse_MissionReport)(nil),
+		(*StatusResponse_UpdateCargoInfo)(nil),
+		(*StatusResponse_SaveCargoInfo)(nil),
+		(*StatusResponse_UpdateAmrCargoInfo)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

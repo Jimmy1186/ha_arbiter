@@ -494,6 +494,362 @@ func (x *MissionReport) GetStep() int32 {
 	return 0
 }
 
+type Cargo struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	PlacementOrder        string                 `protobuf:"bytes,1,opt,name=placement_order,json=placementOrder,proto3" json:"placement_order,omitempty"`
+	CargoInfoId           string                 `protobuf:"bytes,2,opt,name=cargo_info_id,json=cargoInfoId,proto3" json:"cargo_info_id,omitempty"`
+	CustomId              string                 `protobuf:"bytes,3,opt,name=custom_id,json=customId,proto3" json:"custom_id,omitempty"`
+	CustomCargoMetadataId string                 `protobuf:"bytes,4,opt,name=custom_cargo_metadata_id,json=customCargoMetadataId,proto3" json:"custom_cargo_metadata_id,omitempty"`
+	Metadata              string                 `protobuf:"bytes,5,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	AddonMetadata         string                 `protobuf:"bytes,6,opt,name=addon_metadata,json=addonMetadata,proto3" json:"addon_metadata,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *Cargo) Reset() {
+	*x = Cargo{}
+	mi := &file_ha_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Cargo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Cargo) ProtoMessage() {}
+
+func (x *Cargo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Cargo.ProtoReflect.Descriptor instead.
+func (*Cargo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Cargo) GetPlacementOrder() string {
+	if x != nil {
+		return x.PlacementOrder
+	}
+	return ""
+}
+
+func (x *Cargo) GetCargoInfoId() string {
+	if x != nil {
+		return x.CargoInfoId
+	}
+	return ""
+}
+
+func (x *Cargo) GetCustomId() string {
+	if x != nil {
+		return x.CustomId
+	}
+	return ""
+}
+
+func (x *Cargo) GetCustomCargoMetadataId() string {
+	if x != nil {
+		return x.CustomCargoMetadataId
+	}
+	return ""
+}
+
+func (x *Cargo) GetMetadata() string {
+	if x != nil {
+		return x.Metadata
+	}
+	return ""
+}
+
+func (x *Cargo) GetAddonMetadata() string {
+	if x != nil {
+		return x.AddonMetadata
+	}
+	return ""
+}
+
+type UCICargo struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	CargoInfoId           string                 `protobuf:"bytes,2,opt,name=cargo_info_id,json=cargoInfoId,proto3" json:"cargo_info_id,omitempty"`
+	CustomId              string                 `protobuf:"bytes,3,opt,name=custom_id,json=customId,proto3" json:"custom_id,omitempty"`
+	CustomCargoMetadataId string                 `protobuf:"bytes,4,opt,name=custom_cargo_metadata_id,json=customCargoMetadataId,proto3" json:"custom_cargo_metadata_id,omitempty"`
+	Metadata              string                 `protobuf:"bytes,5,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *UCICargo) Reset() {
+	*x = UCICargo{}
+	mi := &file_ha_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UCICargo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UCICargo) ProtoMessage() {}
+
+func (x *UCICargo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UCICargo.ProtoReflect.Descriptor instead.
+func (*UCICargo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UCICargo) GetCargoInfoId() string {
+	if x != nil {
+		return x.CargoInfoId
+	}
+	return ""
+}
+
+func (x *UCICargo) GetCustomId() string {
+	if x != nil {
+		return x.CustomId
+	}
+	return ""
+}
+
+func (x *UCICargo) GetCustomCargoMetadataId() string {
+	if x != nil {
+		return x.CustomCargoMetadataId
+	}
+	return ""
+}
+
+func (x *UCICargo) GetMetadata() string {
+	if x != nil {
+		return x.Metadata
+	}
+	return ""
+}
+
+type UpdateCargoInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	LocationId    string                 `protobuf:"bytes,1,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`
+	Level         int32                  `protobuf:"varint,2,opt,name=level,proto3" json:"level,omitempty"`
+	DbId          string                 `protobuf:"bytes,3,opt,name=db_id,json=dbId,proto3" json:"db_id,omitempty"`
+	Cargo         []*UCICargo            `protobuf:"bytes,4,rep,name=cargo,proto3" json:"cargo,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateCargoInfo) Reset() {
+	*x = UpdateCargoInfo{}
+	mi := &file_ha_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateCargoInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateCargoInfo) ProtoMessage() {}
+
+func (x *UpdateCargoInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateCargoInfo.ProtoReflect.Descriptor instead.
+func (*UpdateCargoInfo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateCargoInfo) GetLocationId() string {
+	if x != nil {
+		return x.LocationId
+	}
+	return ""
+}
+
+func (x *UpdateCargoInfo) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *UpdateCargoInfo) GetDbId() string {
+	if x != nil {
+		return x.DbId
+	}
+	return ""
+}
+
+func (x *UpdateCargoInfo) GetCargo() []*UCICargo {
+	if x != nil {
+		return x.Cargo
+	}
+	return nil
+}
+
+type SaveCargoInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AreaType      string                 `protobuf:"bytes,1,opt,name=area_type,json=areaType,proto3" json:"area_type,omitempty"`
+	AmrId         string                 `protobuf:"bytes,2,opt,name=amr_id,json=amrId,proto3" json:"amr_id,omitempty"`
+	LocationId    string                 `protobuf:"bytes,3,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`
+	Level         int32                  `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`
+	Height        int32                  `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
+	ActionType    string                 `protobuf:"bytes,6,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveCargoInfo) Reset() {
+	*x = SaveCargoInfo{}
+	mi := &file_ha_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveCargoInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveCargoInfo) ProtoMessage() {}
+
+func (x *SaveCargoInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveCargoInfo.ProtoReflect.Descriptor instead.
+func (*SaveCargoInfo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SaveCargoInfo) GetAreaType() string {
+	if x != nil {
+		return x.AreaType
+	}
+	return ""
+}
+
+func (x *SaveCargoInfo) GetAmrId() string {
+	if x != nil {
+		return x.AmrId
+	}
+	return ""
+}
+
+func (x *SaveCargoInfo) GetLocationId() string {
+	if x != nil {
+		return x.LocationId
+	}
+	return ""
+}
+
+func (x *SaveCargoInfo) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *SaveCargoInfo) GetHeight() int32 {
+	if x != nil {
+		return x.Height
+	}
+	return 0
+}
+
+func (x *SaveCargoInfo) GetActionType() string {
+	if x != nil {
+		return x.ActionType
+	}
+	return ""
+}
+
+type UpdateAmrCargoInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AmrId         string                 `protobuf:"bytes,1,opt,name=amr_id,json=amrId,proto3" json:"amr_id,omitempty"`
+	Cargo         []*UCICargo            `protobuf:"bytes,2,rep,name=cargo,proto3" json:"cargo,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateAmrCargoInfo) Reset() {
+	*x = UpdateAmrCargoInfo{}
+	mi := &file_ha_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateAmrCargoInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateAmrCargoInfo) ProtoMessage() {}
+
+func (x *UpdateAmrCargoInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateAmrCargoInfo.ProtoReflect.Descriptor instead.
+func (*UpdateAmrCargoInfo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *UpdateAmrCargoInfo) GetAmrId() string {
+	if x != nil {
+		return x.AmrId
+	}
+	return ""
+}
+
+func (x *UpdateAmrCargoInfo) GetCargo() []*UCICargo {
+	if x != nil {
+		return x.Cargo
+	}
+	return nil
+}
+
 // 從ha送過去給交管的資料
 type ClientMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -504,6 +860,9 @@ type ClientMessage struct {
 	//	*ClientMessage_SyncMission
 	//	*ClientMessage_AgvWorkStatus
 	//	*ClientMessage_MissionReport
+	//	*ClientMessage_UpdateCargoInfo
+	//	*ClientMessage_SaveCargoInfo
+	//	*ClientMessage_UpdateAmrCargoInfo
 	Payload       isClientMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -511,7 +870,7 @@ type ClientMessage struct {
 
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
-	mi := &file_ha_proto_msgTypes[4]
+	mi := &file_ha_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -523,7 +882,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[4]
+	mi := &file_ha_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,7 +895,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{4}
+	return file_ha_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ClientMessage) GetPayload() isClientMessage_Payload {
@@ -591,6 +950,33 @@ func (x *ClientMessage) GetMissionReport() *MissionReport {
 	return nil
 }
 
+func (x *ClientMessage) GetUpdateCargoInfo() *UpdateCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_UpdateCargoInfo); ok {
+			return x.UpdateCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *ClientMessage) GetSaveCargoInfo() *SaveCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_SaveCargoInfo); ok {
+			return x.SaveCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *ClientMessage) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_UpdateAmrCargoInfo); ok {
+			return x.UpdateAmrCargoInfo
+		}
+	}
+	return nil
+}
+
 type isClientMessage_Payload interface {
 	isClientMessage_Payload()
 }
@@ -615,6 +1001,18 @@ type ClientMessage_MissionReport struct {
 	MissionReport *MissionReport `protobuf:"bytes,5,opt,name=mission_report,json=missionReport,proto3,oneof"`
 }
 
+type ClientMessage_UpdateCargoInfo struct {
+	UpdateCargoInfo *UpdateCargoInfo `protobuf:"bytes,6,opt,name=update_cargo_info,json=updateCargoInfo,proto3,oneof"`
+}
+
+type ClientMessage_SaveCargoInfo struct {
+	SaveCargoInfo *SaveCargoInfo `protobuf:"bytes,7,opt,name=save_cargo_info,json=saveCargoInfo,proto3,oneof"`
+}
+
+type ClientMessage_UpdateAmrCargoInfo struct {
+	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,8,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
 
 func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
@@ -624,6 +1022,12 @@ func (*ClientMessage_SyncMission) isClientMessage_Payload() {}
 func (*ClientMessage_AgvWorkStatus) isClientMessage_Payload() {}
 
 func (*ClientMessage_MissionReport) isClientMessage_Payload() {}
+
+func (*ClientMessage_UpdateCargoInfo) isClientMessage_Payload() {}
+
+func (*ClientMessage_SaveCargoInfo) isClientMessage_Payload() {}
+
+func (*ClientMessage_UpdateAmrCargoInfo) isClientMessage_Payload() {}
 
 // 從交管送過來的資料
 type ServerMessage struct {
@@ -636,6 +1040,9 @@ type ServerMessage struct {
 	//	*ServerMessage_SyncMission
 	//	*ServerMessage_AgvWorkStatus
 	//	*ServerMessage_MissionReport
+	//	*ServerMessage_UpdateCargoInfo
+	//	*ServerMessage_SaveCargoInfo
+	//	*ServerMessage_UpdateAmrCargoInfo
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -643,7 +1050,7 @@ type ServerMessage struct {
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
-	mi := &file_ha_proto_msgTypes[5]
+	mi := &file_ha_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -655,7 +1062,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[5]
+	mi := &file_ha_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -668,7 +1075,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{5}
+	return file_ha_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ServerMessage) GetPayload() isServerMessage_Payload {
@@ -732,6 +1139,33 @@ func (x *ServerMessage) GetMissionReport() *MissionReport {
 	return nil
 }
 
+func (x *ServerMessage) GetUpdateCargoInfo() *UpdateCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_UpdateCargoInfo); ok {
+			return x.UpdateCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *ServerMessage) GetSaveCargoInfo() *SaveCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_SaveCargoInfo); ok {
+			return x.SaveCargoInfo
+		}
+	}
+	return nil
+}
+
+func (x *ServerMessage) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_UpdateAmrCargoInfo); ok {
+			return x.UpdateAmrCargoInfo
+		}
+	}
+	return nil
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -761,6 +1195,18 @@ type ServerMessage_MissionReport struct {
 	MissionReport *MissionReport `protobuf:"bytes,6,opt,name=mission_report,json=missionReport,proto3,oneof"`
 }
 
+type ServerMessage_UpdateCargoInfo struct {
+	UpdateCargoInfo *UpdateCargoInfo `protobuf:"bytes,7,opt,name=update_cargo_info,json=updateCargoInfo,proto3,oneof"`
+}
+
+type ServerMessage_SaveCargoInfo struct {
+	SaveCargoInfo *SaveCargoInfo `protobuf:"bytes,8,opt,name=save_cargo_info,json=saveCargoInfo,proto3,oneof"`
+}
+
+type ServerMessage_UpdateAmrCargoInfo struct {
+	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,9,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
@@ -772,6 +1218,12 @@ func (*ServerMessage_SyncMission) isServerMessage_Payload() {}
 func (*ServerMessage_AgvWorkStatus) isServerMessage_Payload() {}
 
 func (*ServerMessage_MissionReport) isServerMessage_Payload() {}
+
+func (*ServerMessage_UpdateCargoInfo) isServerMessage_Payload() {}
+
+func (*ServerMessage_SaveCargoInfo) isServerMessage_Payload() {}
+
+func (*ServerMessage_UpdateAmrCargoInfo) isServerMessage_Payload() {}
 
 var File_ha_proto protoreflect.FileDescriptor
 
@@ -837,21 +1289,57 @@ const file_ha_proto_rawDesc = "" +
 	"\x04step\x18\x06 \x01(\x05H\x02R\x04step\x88\x01\x01B\v\n" +
 	"\t_distanceB\v\n" +
 	"\t_is_abortB\a\n" +
-	"\x05_step\"\x83\x02\n" +
+	"\x05_step\"\xed\x01\n" +
+	"\x05Cargo\x12'\n" +
+	"\x0fplacement_order\x18\x01 \x01(\tR\x0eplacementOrder\x12\"\n" +
+	"\rcargo_info_id\x18\x02 \x01(\tR\vcargoInfoId\x12\x1b\n" +
+	"\tcustom_id\x18\x03 \x01(\tR\bcustomId\x127\n" +
+	"\x18custom_cargo_metadata_id\x18\x04 \x01(\tR\x15customCargoMetadataId\x12\x1a\n" +
+	"\bmetadata\x18\x05 \x01(\tR\bmetadata\x12%\n" +
+	"\x0eaddon_metadata\x18\x06 \x01(\tR\raddonMetadata\"\xa0\x01\n" +
+	"\bUCICargo\x12\"\n" +
+	"\rcargo_info_id\x18\x02 \x01(\tR\vcargoInfoId\x12\x1b\n" +
+	"\tcustom_id\x18\x03 \x01(\tR\bcustomId\x127\n" +
+	"\x18custom_cargo_metadata_id\x18\x04 \x01(\tR\x15customCargoMetadataId\x12\x1a\n" +
+	"\bmetadata\x18\x05 \x01(\tR\bmetadata\"\x84\x01\n" +
+	"\x0fUpdateCargoInfo\x12\x1f\n" +
+	"\vlocation_id\x18\x01 \x01(\tR\n" +
+	"locationId\x12\x14\n" +
+	"\x05level\x18\x02 \x01(\x05R\x05level\x12\x13\n" +
+	"\x05db_id\x18\x03 \x01(\tR\x04dbId\x12%\n" +
+	"\x05cargo\x18\x04 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"\xb3\x01\n" +
+	"\rSaveCargoInfo\x12\x1b\n" +
+	"\tarea_type\x18\x01 \x01(\tR\bareaType\x12\x15\n" +
+	"\x06amr_id\x18\x02 \x01(\tR\x05amrId\x12\x1f\n" +
+	"\vlocation_id\x18\x03 \x01(\tR\n" +
+	"locationId\x12\x14\n" +
+	"\x05level\x18\x04 \x01(\x05R\x05level\x12\x16\n" +
+	"\x06height\x18\x05 \x01(\x05R\x06height\x12\x1f\n" +
+	"\vaction_type\x18\x06 \x01(\tR\n" +
+	"actionType\"R\n" +
+	"\x12UpdateAmrCargoInfo\x12\x15\n" +
+	"\x06amr_id\x18\x01 \x01(\tR\x05amrId\x12%\n" +
+	"\x05cargo\x18\x02 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"\xd9\x03\n" +
 	"\rClientMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12\x1d\n" +
 	"\tis_master\x18\x02 \x01(\bH\x00R\bisMaster\x127\n" +
 	"\fsync_mission\x18\x03 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\x04 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
-	"\x0emission_report\x18\x05 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
-	"\apayload\"\xc0\x02\n" +
+	"\x0emission_report\x18\x05 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
+	"\x11update_cargo_info\x18\x06 \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
+	"\x0fsave_cargo_info\x18\a \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
+	"\x15update_amr_cargo_info\x18\b \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
+	"\apayload\"\x96\x04\n" +
 	"\rServerMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
 	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
 	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x127\n" +
 	"\fsync_mission\x18\x04 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\x05 \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
-	"\x0emission_report\x18\x06 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReportB\t\n" +
+	"\x0emission_report\x18\x06 \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
+	"\x11update_cargo_info\x18\a \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
+	"\x0fsave_cargo_info\x18\b \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
+	"\x15update_amr_cargo_info\x18\t \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -868,30 +1356,43 @@ func file_ha_proto_rawDescGZIP() []byte {
 	return file_ha_proto_rawDescData
 }
 
-var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_ha_proto_goTypes = []any{
-	(*BookingInfo)(nil),   // 0: ha_pb.BookingInfo
-	(*MissionInfo)(nil),   // 1: ha_pb.MissionInfo
-	(*AgvWorkStatus)(nil), // 2: ha_pb.AgvWorkStatus
-	(*MissionReport)(nil), // 3: ha_pb.MissionReport
-	(*ClientMessage)(nil), // 4: ha_pb.ClientMessage
-	(*ServerMessage)(nil), // 5: ha_pb.ServerMessage
+	(*BookingInfo)(nil),        // 0: ha_pb.BookingInfo
+	(*MissionInfo)(nil),        // 1: ha_pb.MissionInfo
+	(*AgvWorkStatus)(nil),      // 2: ha_pb.AgvWorkStatus
+	(*MissionReport)(nil),      // 3: ha_pb.MissionReport
+	(*Cargo)(nil),              // 4: ha_pb.Cargo
+	(*UCICargo)(nil),           // 5: ha_pb.UCICargo
+	(*UpdateCargoInfo)(nil),    // 6: ha_pb.UpdateCargoInfo
+	(*SaveCargoInfo)(nil),      // 7: ha_pb.SaveCargoInfo
+	(*UpdateAmrCargoInfo)(nil), // 8: ha_pb.UpdateAmrCargoInfo
+	(*ClientMessage)(nil),      // 9: ha_pb.ClientMessage
+	(*ServerMessage)(nil),      // 10: ha_pb.ServerMessage
 }
 var file_ha_proto_depIdxs = []int32{
-	0, // 0: ha_pb.MissionInfo.booking:type_name -> ha_pb.BookingInfo
-	1, // 1: ha_pb.ClientMessage.sync_mission:type_name -> ha_pb.MissionInfo
-	2, // 2: ha_pb.ClientMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	3, // 3: ha_pb.ClientMessage.mission_report:type_name -> ha_pb.MissionReport
-	1, // 4: ha_pb.ServerMessage.sync_mission:type_name -> ha_pb.MissionInfo
-	2, // 5: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	3, // 6: ha_pb.ServerMessage.mission_report:type_name -> ha_pb.MissionReport
-	4, // 7: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
-	5, // 8: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
-	8, // [8:9] is the sub-list for method output_type
-	7, // [7:8] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	0,  // 0: ha_pb.MissionInfo.booking:type_name -> ha_pb.BookingInfo
+	5,  // 1: ha_pb.UpdateCargoInfo.cargo:type_name -> ha_pb.UCICargo
+	5,  // 2: ha_pb.UpdateAmrCargoInfo.cargo:type_name -> ha_pb.UCICargo
+	1,  // 3: ha_pb.ClientMessage.sync_mission:type_name -> ha_pb.MissionInfo
+	2,  // 4: ha_pb.ClientMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	3,  // 5: ha_pb.ClientMessage.mission_report:type_name -> ha_pb.MissionReport
+	6,  // 6: ha_pb.ClientMessage.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	7,  // 7: ha_pb.ClientMessage.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	8,  // 8: ha_pb.ClientMessage.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	1,  // 9: ha_pb.ServerMessage.sync_mission:type_name -> ha_pb.MissionInfo
+	2,  // 10: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	3,  // 11: ha_pb.ServerMessage.mission_report:type_name -> ha_pb.MissionReport
+	6,  // 12: ha_pb.ServerMessage.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	7,  // 13: ha_pb.ServerMessage.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	8,  // 14: ha_pb.ServerMessage.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	9,  // 15: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
+	10, // 16: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
+	16, // [16:17] is the sub-list for method output_type
+	15, // [15:16] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_ha_proto_init() }
@@ -901,20 +1402,26 @@ func file_ha_proto_init() {
 	}
 	file_ha_proto_msgTypes[1].OneofWrappers = []any{}
 	file_ha_proto_msgTypes[3].OneofWrappers = []any{}
-	file_ha_proto_msgTypes[4].OneofWrappers = []any{
+	file_ha_proto_msgTypes[9].OneofWrappers = []any{
 		(*ClientMessage_Hb)(nil),
 		(*ClientMessage_IsMaster)(nil),
 		(*ClientMessage_SyncMission)(nil),
 		(*ClientMessage_AgvWorkStatus)(nil),
 		(*ClientMessage_MissionReport)(nil),
+		(*ClientMessage_UpdateCargoInfo)(nil),
+		(*ClientMessage_SaveCargoInfo)(nil),
+		(*ClientMessage_UpdateAmrCargoInfo)(nil),
 	}
-	file_ha_proto_msgTypes[5].OneofWrappers = []any{
+	file_ha_proto_msgTypes[10].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
 		(*ServerMessage_IsEcsConnected)(nil),
 		(*ServerMessage_IsFleetConnected)(nil),
 		(*ServerMessage_SyncMission)(nil),
 		(*ServerMessage_AgvWorkStatus)(nil),
 		(*ServerMessage_MissionReport)(nil),
+		(*ServerMessage_UpdateCargoInfo)(nil),
+		(*ServerMessage_SaveCargoInfo)(nil),
+		(*ServerMessage_UpdateAmrCargoInfo)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -922,7 +1429,7 @@ func file_ha_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ha_proto_rawDesc), len(file_ha_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -33,8 +33,16 @@ protoc --proto_path=./proto \
 
 mysqldump -u root -p --no-data corning_v2 > schema.sql
 
+## 設定完keepalive重起指令
+
 sudo systemctl status keepalived.service
 sudo systemctl stop keepalived.service
 sudo systemctl status keepalived.service
 
+## 查看keepalive日誌
+
 journalctl -u keepalived.service -f
+
+## 來查是否有人設定的ip是不同的
+
+sudo tcpdump -i eno2 vrrp

@@ -59,15 +59,55 @@ message MissionReport {
   optional int32 step        = 6;
 }
 
+message Cargo {
+  string placement_order          = 1;
+  string cargo_info_id            = 2;
+  string custom_id                = 3;
+  string custom_cargo_metadata_id = 4;
+  string metadata                 = 5;
+  string addon_metadata           = 6;
+}
+
+message UCICargo {
+  string cargo_info_id            = 2;
+  string custom_id                = 3;
+  string custom_cargo_metadata_id = 4;
+  string metadata                 = 5;
+}
+
+message UpdateCargoInfo {
+  string            location_id = 1;
+  int32             level       = 2;
+  string            db_id       = 3;
+  repeated UCICargo cargo       = 4;
+}
+
+message SaveCargoInfo {
+  string area_type   = 1;
+  string amr_id      = 2;
+  string location_id = 3;
+  int32  level       = 4;
+  int32  height      = 5;
+  string action_type = 6;
+}
+
+message UpdateAmrCargoInfo {
+  string            amr_id = 1;
+  repeated UCICargo cargo  = 2;
+}
+
 // 從ha送過去給交管的資料
 message ClientMessage {
   oneof payload {
     int32 hb        = 1;
     bool  is_master = 2;
 
-    MissionInfo   sync_mission    = 3;
-    AgvWorkStatus agv_work_status = 4;
-    MissionReport mission_report  = 5;
+    MissionInfo        sync_mission          = 3;
+    AgvWorkStatus      agv_work_status       = 4;
+    MissionReport      mission_report        = 5;
+    UpdateCargoInfo    update_cargo_info     = 6;
+    SaveCargoInfo      save_cargo_info       = 7;
+    UpdateAmrCargoInfo update_amr_cargo_info = 8;
   }
 }
 
@@ -79,9 +119,12 @@ message ServerMessage {
     bool is_ecs_connected   = 2;
     bool is_fleet_connected = 3;
 
-    MissionInfo   sync_mission    = 4;
-    AgvWorkStatus agv_work_status = 5;
-    MissionReport mission_report  = 6;
+    MissionInfo     sync_mission      = 4;
+    AgvWorkStatus   agv_work_status   = 5;
+    MissionReport   mission_report    = 6;
+    UpdateCargoInfo update_cargo_info = 7;
+    SaveCargoInfo   save_cargo_info   = 8;
+    UpdateAmrCargoInfo update_amr_cargo_info = 9;
   }
 }
 

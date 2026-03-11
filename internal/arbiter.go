@@ -151,6 +151,27 @@ func (a *Arbiter) otherHaMsgHandler() {
 				},
 			})
 
+		case *gen.StatusRequest_UpdateCargoInfo:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_UpdateCargoInfo{
+					UpdateCargoInfo: m.UpdateCargoInfo,
+				},
+			})
+
+		case *gen.StatusRequest_SaveCargoInfo:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_SaveCargoInfo{
+					SaveCargoInfo: m.SaveCargoInfo,
+				},
+			})
+
+		case *gen.StatusRequest_UpdateAmrCargoInfo:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_UpdateAmrCargoInfo{
+					UpdateAmrCargoInfo: m.UpdateAmrCargoInfo,
+				},
+			})
+
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -222,6 +243,36 @@ func (a *Arbiter) fleetMsgHandler() {
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_MissionReport{
 					MissionReport: report,
+				},
+			})
+
+		case *gen.ServerMessage_UpdateCargoInfo:
+			cuInfo := m.UpdateCargoInfo
+			log.Printf("📦 [貨物] 編輯於地點: %s", cuInfo.LocationId)
+
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_UpdateCargoInfo{
+					UpdateCargoInfo: cuInfo,
+				},
+			})
+
+		case *gen.ServerMessage_SaveCargoInfo:
+			saveCargo := m.SaveCargoInfo
+			log.Printf("📦 [貨物] 搬運: %s, 地點: %s", saveCargo.AmrId, saveCargo.LocationId)
+
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_SaveCargoInfo{
+					SaveCargoInfo: saveCargo,
+				},
+			})
+
+		case *gen.ServerMessage_UpdateAmrCargoInfo:
+			amrCargo := m.UpdateAmrCargoInfo
+			log.Printf("📦 [貨物] 更新車輛貨物:%s ", amrCargo.AmrId)
+
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_UpdateAmrCargoInfo{
+					UpdateAmrCargoInfo: amrCargo,
 				},
 			})
 
