@@ -19,13 +19,15 @@ message StatusRequest {
     bool  is_fleet_connected = 3;
     bool  is_ecs_connected   = 4;
 
-    PeerArbiter           peer_arbiter      = 5;
-    ha_pb.MissionInfo     sync_mission      = 6;
-    ha_pb.AgvWorkStatus   agv_work_status   = 7;
-    ha_pb.MissionReport   mission_report    = 8;
-    ha_pb.UpdateCargoInfo update_cargo_info = 9;
-    ha_pb.SaveCargoInfo   save_cargo_info   = 10;
+    PeerArbiter              peer_arbiter          = 5;
+    string                   sync_mission          = 6;
+    ha_pb.AgvWorkStatus      agv_work_status       = 7;
+    ha_pb.MissionReport      mission_report        = 8;
+    ha_pb.UpdateCargoInfo    update_cargo_info     = 9;
+    ha_pb.SaveCargoInfo      save_cargo_info       = 10;
     ha_pb.UpdateAmrCargoInfo update_amr_cargo_info = 11;
+    ha_pb.MissionAssign      mission_assign        = 12;
+    string                   book_block            = 13;
   }
 }
 
@@ -37,13 +39,15 @@ message StatusResponse {
     bool  is_fleet_connected = 3;
     bool  is_ecs_connected   = 4;
 
-    PeerArbiter           peer_arbiter      = 5;
-    ha_pb.MissionInfo     sync_mission      = 6;
-    ha_pb.AgvWorkStatus   agv_work_status   = 7;
-    ha_pb.MissionReport   mission_report    = 8;
-    ha_pb.UpdateCargoInfo update_cargo_info = 9;
-    ha_pb.SaveCargoInfo   save_cargo_info   = 10;
+    PeerArbiter              peer_arbiter          = 5;
+    string                   sync_mission          = 6;
+    ha_pb.AgvWorkStatus      agv_work_status       = 7;
+    ha_pb.MissionReport      mission_report        = 8;
+    ha_pb.UpdateCargoInfo    update_cargo_info     = 9;
+    ha_pb.SaveCargoInfo      save_cargo_info       = 10;
     ha_pb.UpdateAmrCargoInfo update_amr_cargo_info = 11;
+    ha_pb.MissionAssign      mission_assign        = 12;
+    string                   book_block            = 13;
   }
 }
 

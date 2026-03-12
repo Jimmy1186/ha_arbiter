@@ -172,6 +172,20 @@ func (a *Arbiter) otherHaMsgHandler() {
 				},
 			})
 
+		case *gen.StatusRequest_MissionAssign:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_MissionAssign{
+					MissionAssign: m.MissionAssign,
+				},
+			})
+
+		case *gen.StatusRequest_BookBlock:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_BookBlock{
+					BookBlock: m.BookBlock,
+				},
+			})
+
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -215,8 +229,7 @@ func (a *Arbiter) fleetMsgHandler() {
 
 		case *gen.ServerMessage_SyncMission:
 			info := m.SyncMission
-			log.Printf("📋 [任務同步] 收到任務: %s (狀態: %v)",
-				info.SubName, info.Status)
+			log.Printf("📋 [任務同步] 收到任務")
 
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_SyncMission{
@@ -273,6 +286,22 @@ func (a *Arbiter) fleetMsgHandler() {
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_UpdateAmrCargoInfo{
 					UpdateAmrCargoInfo: amrCargo,
+				},
+			})
+
+		case *gen.ServerMessage_MissionAssign:
+			log.Printf("📋 [任務指派] mission id: %s, amrId: %s", m.MissionAssign.MissionId, m.MissionAssign.AmrId)
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_MissionAssign{
+					MissionAssign: m.MissionAssign,
+				},
+			})
+
+		case *gen.ServerMessage_BookBlock:
+			log.Printf("📋 [儲位預定]")
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_BookBlock{
+					BookBlock: m.BookBlock,
 				},
 			})
 

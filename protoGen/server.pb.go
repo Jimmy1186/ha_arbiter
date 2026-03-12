@@ -97,6 +97,8 @@ type StatusRequest struct {
 	//	*StatusRequest_UpdateCargoInfo
 	//	*StatusRequest_SaveCargoInfo
 	//	*StatusRequest_UpdateAmrCargoInfo
+	//	*StatusRequest_MissionAssign
+	//	*StatusRequest_BookBlock
 	Payload       isStatusRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -184,13 +186,13 @@ func (x *StatusRequest) GetPeerArbiter() *PeerArbiter {
 	return nil
 }
 
-func (x *StatusRequest) GetSyncMission() *MissionInfo {
+func (x *StatusRequest) GetSyncMission() string {
 	if x != nil {
 		if x, ok := x.Payload.(*StatusRequest_SyncMission); ok {
 			return x.SyncMission
 		}
 	}
-	return nil
+	return ""
 }
 
 func (x *StatusRequest) GetAgvWorkStatus() *AgvWorkStatus {
@@ -238,6 +240,24 @@ func (x *StatusRequest) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
 	return nil
 }
 
+func (x *StatusRequest) GetMissionAssign() *MissionAssign {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_MissionAssign); ok {
+			return x.MissionAssign
+		}
+	}
+	return nil
+}
+
+func (x *StatusRequest) GetBookBlock() string {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_BookBlock); ok {
+			return x.BookBlock
+		}
+	}
+	return ""
+}
+
 type isStatusRequest_Payload interface {
 	isStatusRequest_Payload()
 }
@@ -263,7 +283,7 @@ type StatusRequest_PeerArbiter struct {
 }
 
 type StatusRequest_SyncMission struct {
-	SyncMission *MissionInfo `protobuf:"bytes,6,opt,name=sync_mission,json=syncMission,proto3,oneof"`
+	SyncMission string `protobuf:"bytes,6,opt,name=sync_mission,json=syncMission,proto3,oneof"`
 }
 
 type StatusRequest_AgvWorkStatus struct {
@@ -284,6 +304,14 @@ type StatusRequest_SaveCargoInfo struct {
 
 type StatusRequest_UpdateAmrCargoInfo struct {
 	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,11,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
+type StatusRequest_MissionAssign struct {
+	MissionAssign *MissionAssign `protobuf:"bytes,12,opt,name=mission_assign,json=missionAssign,proto3,oneof"`
+}
+
+type StatusRequest_BookBlock struct {
+	BookBlock string `protobuf:"bytes,13,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
 func (*StatusRequest_Hb) isStatusRequest_Payload() {}
@@ -308,6 +336,10 @@ func (*StatusRequest_SaveCargoInfo) isStatusRequest_Payload() {}
 
 func (*StatusRequest_UpdateAmrCargoInfo) isStatusRequest_Payload() {}
 
+func (*StatusRequest_MissionAssign) isStatusRequest_Payload() {}
+
+func (*StatusRequest_BookBlock) isStatusRequest_Payload() {}
+
 // 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
 type StatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -324,6 +356,8 @@ type StatusResponse struct {
 	//	*StatusResponse_UpdateCargoInfo
 	//	*StatusResponse_SaveCargoInfo
 	//	*StatusResponse_UpdateAmrCargoInfo
+	//	*StatusResponse_MissionAssign
+	//	*StatusResponse_BookBlock
 	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -411,13 +445,13 @@ func (x *StatusResponse) GetPeerArbiter() *PeerArbiter {
 	return nil
 }
 
-func (x *StatusResponse) GetSyncMission() *MissionInfo {
+func (x *StatusResponse) GetSyncMission() string {
 	if x != nil {
 		if x, ok := x.Payload.(*StatusResponse_SyncMission); ok {
 			return x.SyncMission
 		}
 	}
-	return nil
+	return ""
 }
 
 func (x *StatusResponse) GetAgvWorkStatus() *AgvWorkStatus {
@@ -465,6 +499,24 @@ func (x *StatusResponse) GetUpdateAmrCargoInfo() *UpdateAmrCargoInfo {
 	return nil
 }
 
+func (x *StatusResponse) GetMissionAssign() *MissionAssign {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_MissionAssign); ok {
+			return x.MissionAssign
+		}
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetBookBlock() string {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_BookBlock); ok {
+			return x.BookBlock
+		}
+	}
+	return ""
+}
+
 type isStatusResponse_Payload interface {
 	isStatusResponse_Payload()
 }
@@ -490,7 +542,7 @@ type StatusResponse_PeerArbiter struct {
 }
 
 type StatusResponse_SyncMission struct {
-	SyncMission *MissionInfo `protobuf:"bytes,6,opt,name=sync_mission,json=syncMission,proto3,oneof"`
+	SyncMission string `protobuf:"bytes,6,opt,name=sync_mission,json=syncMission,proto3,oneof"`
 }
 
 type StatusResponse_AgvWorkStatus struct {
@@ -511,6 +563,14 @@ type StatusResponse_SaveCargoInfo struct {
 
 type StatusResponse_UpdateAmrCargoInfo struct {
 	UpdateAmrCargoInfo *UpdateAmrCargoInfo `protobuf:"bytes,11,opt,name=update_amr_cargo_info,json=updateAmrCargoInfo,proto3,oneof"`
+}
+
+type StatusResponse_MissionAssign struct {
+	MissionAssign *MissionAssign `protobuf:"bytes,12,opt,name=mission_assign,json=missionAssign,proto3,oneof"`
+}
+
+type StatusResponse_BookBlock struct {
+	BookBlock string `protobuf:"bytes,13,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
 func (*StatusResponse_Hb) isStatusResponse_Payload() {}
@@ -535,6 +595,10 @@ func (*StatusResponse_SaveCargoInfo) isStatusResponse_Payload() {}
 
 func (*StatusResponse_UpdateAmrCargoInfo) isStatusResponse_Payload() {}
 
+func (*StatusResponse_MissionAssign) isStatusResponse_Payload() {}
+
+func (*StatusResponse_BookBlock) isStatusResponse_Payload() {}
+
 var File_server_proto protoreflect.FileDescriptor
 
 const file_server_proto_rawDesc = "" +
@@ -544,34 +608,40 @@ const file_server_proto_rawDesc = "" +
 	"\vPeerArbiter\x12\x10\n" +
 	"\x03ecs\x18\x01 \x01(\bR\x03ecs\x12\x14\n" +
 	"\x05fleet\x18\x02 \x01(\bR\x05fleet\x12\x0e\n" +
-	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xfe\x04\n" +
+	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xca\x05\n" +
 	"\rStatusRequest\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
 	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x12*\n" +
 	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnected\x12<\n" +
-	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
-	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
+	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x12#\n" +
+	"\fsync_mission\x18\x06 \x01(\tH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
 	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
 	"\x11update_cargo_info\x18\t \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
 	"\x0fsave_cargo_info\x18\n" +
 	" \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
-	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
-	"\apayload\"\xff\x04\n" +
+	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfo\x12=\n" +
+	"\x0emission_assign\x18\f \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
+	"\n" +
+	"book_block\x18\r \x01(\tH\x00R\tbookBlockB\t\n" +
+	"\apayload\"\xcb\x05\n" +
 	"\x0eStatusResponse\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
 	"\x12is_fleet_connected\x18\x03 \x01(\bH\x00R\x10isFleetConnected\x12*\n" +
 	"\x10is_ecs_connected\x18\x04 \x01(\bH\x00R\x0eisEcsConnected\x12<\n" +
-	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x127\n" +
-	"\fsync_mission\x18\x06 \x01(\v2\x12.ha_pb.MissionInfoH\x00R\vsyncMission\x12>\n" +
+	"\fpeer_arbiter\x18\x05 \x01(\v2\x17.ha_sync_pb.PeerArbiterH\x00R\vpeerArbiter\x12#\n" +
+	"\fsync_mission\x18\x06 \x01(\tH\x00R\vsyncMission\x12>\n" +
 	"\x0fagv_work_status\x18\a \x01(\v2\x14.ha_pb.AgvWorkStatusH\x00R\ragvWorkStatus\x12=\n" +
 	"\x0emission_report\x18\b \x01(\v2\x14.ha_pb.MissionReportH\x00R\rmissionReport\x12D\n" +
 	"\x11update_cargo_info\x18\t \x01(\v2\x16.ha_pb.UpdateCargoInfoH\x00R\x0fupdateCargoInfo\x12>\n" +
 	"\x0fsave_cargo_info\x18\n" +
 	" \x01(\v2\x14.ha_pb.SaveCargoInfoH\x00R\rsaveCargoInfo\x12N\n" +
-	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfoB\t\n" +
+	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfo\x12=\n" +
+	"\x0emission_assign\x18\f \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
+	"\n" +
+	"book_block\x18\r \x01(\tH\x00R\tbookBlockB\t\n" +
 	"\apayload2\\\n" +
 	"\rHASyncService\x12K\n" +
 	"\x0eExchangeStatus\x12\x19.ha_sync_pb.StatusRequest\x1a\x1a.ha_sync_pb.StatusResponse(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -593,28 +663,28 @@ var file_server_proto_goTypes = []any{
 	(*PeerArbiter)(nil),        // 0: ha_sync_pb.PeerArbiter
 	(*StatusRequest)(nil),      // 1: ha_sync_pb.StatusRequest
 	(*StatusResponse)(nil),     // 2: ha_sync_pb.StatusResponse
-	(*MissionInfo)(nil),        // 3: ha_pb.MissionInfo
-	(*AgvWorkStatus)(nil),      // 4: ha_pb.AgvWorkStatus
-	(*MissionReport)(nil),      // 5: ha_pb.MissionReport
-	(*UpdateCargoInfo)(nil),    // 6: ha_pb.UpdateCargoInfo
-	(*SaveCargoInfo)(nil),      // 7: ha_pb.SaveCargoInfo
-	(*UpdateAmrCargoInfo)(nil), // 8: ha_pb.UpdateAmrCargoInfo
+	(*AgvWorkStatus)(nil),      // 3: ha_pb.AgvWorkStatus
+	(*MissionReport)(nil),      // 4: ha_pb.MissionReport
+	(*UpdateCargoInfo)(nil),    // 5: ha_pb.UpdateCargoInfo
+	(*SaveCargoInfo)(nil),      // 6: ha_pb.SaveCargoInfo
+	(*UpdateAmrCargoInfo)(nil), // 7: ha_pb.UpdateAmrCargoInfo
+	(*MissionAssign)(nil),      // 8: ha_pb.MissionAssign
 }
 var file_server_proto_depIdxs = []int32{
 	0,  // 0: ha_sync_pb.StatusRequest.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
-	3,  // 1: ha_sync_pb.StatusRequest.sync_mission:type_name -> ha_pb.MissionInfo
-	4,  // 2: ha_sync_pb.StatusRequest.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	5,  // 3: ha_sync_pb.StatusRequest.mission_report:type_name -> ha_pb.MissionReport
-	6,  // 4: ha_sync_pb.StatusRequest.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
-	7,  // 5: ha_sync_pb.StatusRequest.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
-	8,  // 6: ha_sync_pb.StatusRequest.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	3,  // 1: ha_sync_pb.StatusRequest.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	4,  // 2: ha_sync_pb.StatusRequest.mission_report:type_name -> ha_pb.MissionReport
+	5,  // 3: ha_sync_pb.StatusRequest.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	6,  // 4: ha_sync_pb.StatusRequest.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	7,  // 5: ha_sync_pb.StatusRequest.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	8,  // 6: ha_sync_pb.StatusRequest.mission_assign:type_name -> ha_pb.MissionAssign
 	0,  // 7: ha_sync_pb.StatusResponse.peer_arbiter:type_name -> ha_sync_pb.PeerArbiter
-	3,  // 8: ha_sync_pb.StatusResponse.sync_mission:type_name -> ha_pb.MissionInfo
-	4,  // 9: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	5,  // 10: ha_sync_pb.StatusResponse.mission_report:type_name -> ha_pb.MissionReport
-	6,  // 11: ha_sync_pb.StatusResponse.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
-	7,  // 12: ha_sync_pb.StatusResponse.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
-	8,  // 13: ha_sync_pb.StatusResponse.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	3,  // 8: ha_sync_pb.StatusResponse.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	4,  // 9: ha_sync_pb.StatusResponse.mission_report:type_name -> ha_pb.MissionReport
+	5,  // 10: ha_sync_pb.StatusResponse.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	6,  // 11: ha_sync_pb.StatusResponse.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	7,  // 12: ha_sync_pb.StatusResponse.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	8,  // 13: ha_sync_pb.StatusResponse.mission_assign:type_name -> ha_pb.MissionAssign
 	1,  // 14: ha_sync_pb.HASyncService.ExchangeStatus:input_type -> ha_sync_pb.StatusRequest
 	2,  // 15: ha_sync_pb.HASyncService.ExchangeStatus:output_type -> ha_sync_pb.StatusResponse
 	15, // [15:16] is the sub-list for method output_type
@@ -642,6 +712,8 @@ func file_server_proto_init() {
 		(*StatusRequest_UpdateCargoInfo)(nil),
 		(*StatusRequest_SaveCargoInfo)(nil),
 		(*StatusRequest_UpdateAmrCargoInfo)(nil),
+		(*StatusRequest_MissionAssign)(nil),
+		(*StatusRequest_BookBlock)(nil),
 	}
 	file_server_proto_msgTypes[2].OneofWrappers = []any{
 		(*StatusResponse_Hb)(nil),
@@ -655,6 +727,8 @@ func file_server_proto_init() {
 		(*StatusResponse_UpdateCargoInfo)(nil),
 		(*StatusResponse_SaveCargoInfo)(nil),
 		(*StatusResponse_UpdateAmrCargoInfo)(nil),
+		(*StatusResponse_MissionAssign)(nil),
+		(*StatusResponse_BookBlock)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
