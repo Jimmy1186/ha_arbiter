@@ -28,6 +28,7 @@ message StatusRequest {
     ha_pb.UpdateAmrCargoInfo update_amr_cargo_info = 11;
     ha_pb.MissionAssign      mission_assign        = 12;
     string                   book_block            = 13;
+    string                   sync_all_mission      = 14;
   }
 }
 
@@ -48,6 +49,7 @@ message StatusResponse {
     ha_pb.UpdateAmrCargoInfo update_amr_cargo_info = 11;
     ha_pb.MissionAssign      mission_assign        = 12;
     string                   book_block            = 13;
+    string                   sync_all_mission      = 14;
   }
 }
 

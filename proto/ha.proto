@@ -38,7 +38,6 @@ message MissionAssign  {
   string amr_id     = 4;
 }
 
-
 message Cargo {
   string placement_order          = 1;
   string cargo_info_id            = 2;
@@ -90,6 +89,8 @@ message ClientMessage {
     UpdateAmrCargoInfo update_amr_cargo_info = 8;
     MissionAssign      mission_assign        = 9;
     string             book_block            = 10;
+    string             backup_connected      = 11;
+    string             sync_all_mission      = 12;
   }
 }
 
@@ -109,6 +110,7 @@ message ServerMessage {
     UpdateAmrCargoInfo update_amr_cargo_info = 9;
     MissionAssign      mission_assign        = 10;
     string             book_block            = 11;
+    string             sync_all_mission      = 12;
   }
 }
 

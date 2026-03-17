@@ -112,6 +112,7 @@ func (a *Arbiter) MsgHandler() {
 	a.otherHaMsgHandler()
 	a.fleetMsgHandler()
 	a.whenFleetConnect()
+	a.whenBackupConnect()
 }
 
 // 接收來自其他的HA的資料
@@ -186,6 +187,13 @@ func (a *Arbiter) otherHaMsgHandler() {
 				},
 			})
 
+		case *gen.StatusRequest_SyncAllMission:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_SyncAllMission{
+					SyncAllMission: m.SyncAllMission,
+				},
+			})
+
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -196,6 +204,20 @@ func (a *Arbiter) otherHaMsgHandler() {
 func (a *Arbiter) whenFleetConnect() {
 	a.fleetClient.OnFleetConnected = func() {
 		a.UpdateMaster(a.IsMaster)
+	}
+}
+
+func (a *Arbiter) whenBackupConnect() {
+	if a.IsMaster == false {
+		return
+	}
+
+	a.otherHaServer.OnClientConnected = func() {
+		a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+			Payload: &gen.ClientMessage_BackupConnected{
+				BackupConnected: time.Now().GoString(),
+			},
+		})
 	}
 }
 
@@ -305,8 +327,17 @@ func (a *Arbiter) fleetMsgHandler() {
 				},
 			})
 
+		case *gen.ServerMessage_SyncAllMission:
+			log.Printf("📋 [同步所有任務]")
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_SyncAllMission{
+					SyncAllMission: m.SyncAllMission,
+				},
+			})
+
 		default:
 			log.Printf("❓ [未知訊息] 收到未定義的 Payload 類型: %T", m)
+			//肏擬媽康寧
 		}
 	}
 }

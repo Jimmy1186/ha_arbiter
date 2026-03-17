@@ -99,6 +99,7 @@ type StatusRequest struct {
 	//	*StatusRequest_UpdateAmrCargoInfo
 	//	*StatusRequest_MissionAssign
 	//	*StatusRequest_BookBlock
+	//	*StatusRequest_SyncAllMission
 	Payload       isStatusRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -258,6 +259,15 @@ func (x *StatusRequest) GetBookBlock() string {
 	return ""
 }
 
+func (x *StatusRequest) GetSyncAllMission() string {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusRequest_SyncAllMission); ok {
+			return x.SyncAllMission
+		}
+	}
+	return ""
+}
+
 type isStatusRequest_Payload interface {
 	isStatusRequest_Payload()
 }
@@ -314,6 +324,10 @@ type StatusRequest_BookBlock struct {
 	BookBlock string `protobuf:"bytes,13,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
+type StatusRequest_SyncAllMission struct {
+	SyncAllMission string `protobuf:"bytes,14,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
+}
+
 func (*StatusRequest_Hb) isStatusRequest_Payload() {}
 
 func (*StatusRequest_IsHaConnected) isStatusRequest_Payload() {}
@@ -340,6 +354,8 @@ func (*StatusRequest_MissionAssign) isStatusRequest_Payload() {}
 
 func (*StatusRequest_BookBlock) isStatusRequest_Payload() {}
 
+func (*StatusRequest_SyncAllMission) isStatusRequest_Payload() {}
+
 // 另外一台ha送來這台ha的資料 原則上不從此發送訊息到另外的ha (server)
 type StatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -358,6 +374,7 @@ type StatusResponse struct {
 	//	*StatusResponse_UpdateAmrCargoInfo
 	//	*StatusResponse_MissionAssign
 	//	*StatusResponse_BookBlock
+	//	*StatusResponse_SyncAllMission
 	Payload       isStatusResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -517,6 +534,15 @@ func (x *StatusResponse) GetBookBlock() string {
 	return ""
 }
 
+func (x *StatusResponse) GetSyncAllMission() string {
+	if x != nil {
+		if x, ok := x.Payload.(*StatusResponse_SyncAllMission); ok {
+			return x.SyncAllMission
+		}
+	}
+	return ""
+}
+
 type isStatusResponse_Payload interface {
 	isStatusResponse_Payload()
 }
@@ -573,6 +599,10 @@ type StatusResponse_BookBlock struct {
 	BookBlock string `protobuf:"bytes,13,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
+type StatusResponse_SyncAllMission struct {
+	SyncAllMission string `protobuf:"bytes,14,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
+}
+
 func (*StatusResponse_Hb) isStatusResponse_Payload() {}
 
 func (*StatusResponse_IsHaConnected) isStatusResponse_Payload() {}
@@ -599,6 +629,8 @@ func (*StatusResponse_MissionAssign) isStatusResponse_Payload() {}
 
 func (*StatusResponse_BookBlock) isStatusResponse_Payload() {}
 
+func (*StatusResponse_SyncAllMission) isStatusResponse_Payload() {}
+
 var File_server_proto protoreflect.FileDescriptor
 
 const file_server_proto_rawDesc = "" +
@@ -608,7 +640,7 @@ const file_server_proto_rawDesc = "" +
 	"\vPeerArbiter\x12\x10\n" +
 	"\x03ecs\x18\x01 \x01(\bR\x03ecs\x12\x14\n" +
 	"\x05fleet\x18\x02 \x01(\bR\x05fleet\x12\x0e\n" +
-	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xca\x05\n" +
+	"\x02ha\x18\x03 \x01(\bR\x02ha\"\xf6\x05\n" +
 	"\rStatusRequest\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -624,8 +656,9 @@ const file_server_proto_rawDesc = "" +
 	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfo\x12=\n" +
 	"\x0emission_assign\x18\f \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
 	"\n" +
-	"book_block\x18\r \x01(\tH\x00R\tbookBlockB\t\n" +
-	"\apayload\"\xcb\x05\n" +
+	"book_block\x18\r \x01(\tH\x00R\tbookBlock\x12*\n" +
+	"\x10sync_all_mission\x18\x0e \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
+	"\apayload\"\xf7\x05\n" +
 	"\x0eStatusResponse\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12(\n" +
 	"\x0fis_ha_connected\x18\x02 \x01(\bH\x00R\risHaConnected\x12.\n" +
@@ -641,7 +674,8 @@ const file_server_proto_rawDesc = "" +
 	"\x15update_amr_cargo_info\x18\v \x01(\v2\x19.ha_pb.UpdateAmrCargoInfoH\x00R\x12updateAmrCargoInfo\x12=\n" +
 	"\x0emission_assign\x18\f \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
 	"\n" +
-	"book_block\x18\r \x01(\tH\x00R\tbookBlockB\t\n" +
+	"book_block\x18\r \x01(\tH\x00R\tbookBlock\x12*\n" +
+	"\x10sync_all_mission\x18\x0e \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
 	"\apayload2\\\n" +
 	"\rHASyncService\x12K\n" +
 	"\x0eExchangeStatus\x12\x19.ha_sync_pb.StatusRequest\x1a\x1a.ha_sync_pb.StatusResponse(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -714,6 +748,7 @@ func file_server_proto_init() {
 		(*StatusRequest_UpdateAmrCargoInfo)(nil),
 		(*StatusRequest_MissionAssign)(nil),
 		(*StatusRequest_BookBlock)(nil),
+		(*StatusRequest_SyncAllMission)(nil),
 	}
 	file_server_proto_msgTypes[2].OneofWrappers = []any{
 		(*StatusResponse_Hb)(nil),
@@ -729,6 +764,7 @@ func file_server_proto_init() {
 		(*StatusResponse_UpdateAmrCargoInfo)(nil),
 		(*StatusResponse_MissionAssign)(nil),
 		(*StatusResponse_BookBlock)(nil),
+		(*StatusResponse_SyncAllMission)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

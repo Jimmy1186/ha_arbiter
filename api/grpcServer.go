@@ -21,6 +21,8 @@ type HAToOtherServer struct {
 
 	//用類似callback的方式 可以在其他地方呼叫用
 	OnReceiveMsg func(msg *pb.StatusRequest)
+
+	OnClientConnected func()
 }
 
 // ClientConnection represents a connected client
@@ -85,6 +87,10 @@ func (s *HAToOtherServer) ExchangeStatus(stream pb.HASyncService_ExchangeStatusS
 	s.clientsLock.Lock()
 	s.clients[clientID] = client
 	s.clientsLock.Unlock()
+
+	if s.OnClientConnected != nil {
+		go s.OnClientConnected()
+	}
 
 	log.Printf("✅ 新客戶端連線: %s (總數: %d)", clientID, len(s.clients))
 

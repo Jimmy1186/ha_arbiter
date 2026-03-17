@@ -696,6 +696,8 @@ type ClientMessage struct {
 	//	*ClientMessage_UpdateAmrCargoInfo
 	//	*ClientMessage_MissionAssign
 	//	*ClientMessage_BookBlock
+	//	*ClientMessage_BackupConnected
+	//	*ClientMessage_SyncAllMission
 	Payload       isClientMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -828,6 +830,24 @@ func (x *ClientMessage) GetBookBlock() string {
 	return ""
 }
 
+func (x *ClientMessage) GetBackupConnected() string {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_BackupConnected); ok {
+			return x.BackupConnected
+		}
+	}
+	return ""
+}
+
+func (x *ClientMessage) GetSyncAllMission() string {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_SyncAllMission); ok {
+			return x.SyncAllMission
+		}
+	}
+	return ""
+}
+
 type isClientMessage_Payload interface {
 	isClientMessage_Payload()
 }
@@ -872,6 +892,14 @@ type ClientMessage_BookBlock struct {
 	BookBlock string `protobuf:"bytes,10,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
+type ClientMessage_BackupConnected struct {
+	BackupConnected string `protobuf:"bytes,11,opt,name=backup_connected,json=backupConnected,proto3,oneof"`
+}
+
+type ClientMessage_SyncAllMission struct {
+	SyncAllMission string `protobuf:"bytes,12,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
+}
+
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
 
 func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
@@ -892,6 +920,10 @@ func (*ClientMessage_MissionAssign) isClientMessage_Payload() {}
 
 func (*ClientMessage_BookBlock) isClientMessage_Payload() {}
 
+func (*ClientMessage_BackupConnected) isClientMessage_Payload() {}
+
+func (*ClientMessage_SyncAllMission) isClientMessage_Payload() {}
+
 // 從交管送過來的資料
 type ServerMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -908,6 +940,7 @@ type ServerMessage struct {
 	//	*ServerMessage_UpdateAmrCargoInfo
 	//	*ServerMessage_MissionAssign
 	//	*ServerMessage_BookBlock
+	//	*ServerMessage_SyncAllMission
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1049,6 +1082,15 @@ func (x *ServerMessage) GetBookBlock() string {
 	return ""
 }
 
+func (x *ServerMessage) GetSyncAllMission() string {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_SyncAllMission); ok {
+			return x.SyncAllMission
+		}
+	}
+	return ""
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -1098,6 +1140,10 @@ type ServerMessage_BookBlock struct {
 	BookBlock string `protobuf:"bytes,11,opt,name=book_block,json=bookBlock,proto3,oneof"`
 }
 
+type ServerMessage_SyncAllMission struct {
+	SyncAllMission string `protobuf:"bytes,12,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
@@ -1119,6 +1165,8 @@ func (*ServerMessage_UpdateAmrCargoInfo) isServerMessage_Payload() {}
 func (*ServerMessage_MissionAssign) isServerMessage_Payload() {}
 
 func (*ServerMessage_BookBlock) isServerMessage_Payload() {}
+
+func (*ServerMessage_SyncAllMission) isServerMessage_Payload() {}
 
 var File_ha_proto protoreflect.FileDescriptor
 
@@ -1186,7 +1234,7 @@ const file_ha_proto_rawDesc = "" +
 	"actionType\"R\n" +
 	"\x12UpdateAmrCargoInfo\x12\x15\n" +
 	"\x06amr_id\x18\x01 \x01(\tR\x05amrId\x12%\n" +
-	"\x05cargo\x18\x02 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"\xa5\x04\n" +
+	"\x05cargo\x18\x02 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"\xfe\x04\n" +
 	"\rClientMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12\x1d\n" +
 	"\tis_master\x18\x02 \x01(\bH\x00R\bisMaster\x12#\n" +
@@ -1199,8 +1247,10 @@ const file_ha_proto_rawDesc = "" +
 	"\x0emission_assign\x18\t \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
 	"\n" +
 	"book_block\x18\n" +
-	" \x01(\tH\x00R\tbookBlockB\t\n" +
-	"\apayload\"\xe2\x04\n" +
+	" \x01(\tH\x00R\tbookBlock\x12+\n" +
+	"\x10backup_connected\x18\v \x01(\tH\x00R\x0fbackupConnected\x12*\n" +
+	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
+	"\apayload\"\x8e\x05\n" +
 	"\rServerMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
 	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
@@ -1214,7 +1264,8 @@ const file_ha_proto_rawDesc = "" +
 	"\x0emission_assign\x18\n" +
 	" \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
 	"\n" +
-	"book_block\x18\v \x01(\tH\x00R\tbookBlockB\t\n" +
+	"book_block\x18\v \x01(\tH\x00R\tbookBlock\x12*\n" +
+	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -1286,6 +1337,8 @@ func file_ha_proto_init() {
 		(*ClientMessage_UpdateAmrCargoInfo)(nil),
 		(*ClientMessage_MissionAssign)(nil),
 		(*ClientMessage_BookBlock)(nil),
+		(*ClientMessage_BackupConnected)(nil),
+		(*ClientMessage_SyncAllMission)(nil),
 	}
 	file_ha_proto_msgTypes[10].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
@@ -1299,6 +1352,7 @@ func file_ha_proto_init() {
 		(*ServerMessage_UpdateAmrCargoInfo)(nil),
 		(*ServerMessage_MissionAssign)(nil),
 		(*ServerMessage_BookBlock)(nil),
+		(*ServerMessage_SyncAllMission)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
