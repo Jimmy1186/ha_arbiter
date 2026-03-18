@@ -681,6 +681,58 @@ func (x *UpdateAmrCargoInfo) GetCargo() []*UCICargo {
 	return nil
 }
 
+type SyncAllMemoryCargo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CargoJson     string                 `protobuf:"bytes,1,opt,name=cargo_json,json=cargoJson,proto3" json:"cargo_json,omitempty"`
+	AreaType      string                 `protobuf:"bytes,2,opt,name=area_type,json=areaType,proto3" json:"area_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncAllMemoryCargo) Reset() {
+	*x = SyncAllMemoryCargo{}
+	mi := &file_ha_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncAllMemoryCargo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncAllMemoryCargo) ProtoMessage() {}
+
+func (x *SyncAllMemoryCargo) ProtoReflect() protoreflect.Message {
+	mi := &file_ha_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncAllMemoryCargo.ProtoReflect.Descriptor instead.
+func (*SyncAllMemoryCargo) Descriptor() ([]byte, []int) {
+	return file_ha_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SyncAllMemoryCargo) GetCargoJson() string {
+	if x != nil {
+		return x.CargoJson
+	}
+	return ""
+}
+
+func (x *SyncAllMemoryCargo) GetAreaType() string {
+	if x != nil {
+		return x.AreaType
+	}
+	return ""
+}
+
 // 從ha送過去給交管的資料
 type ClientMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -698,6 +750,8 @@ type ClientMessage struct {
 	//	*ClientMessage_BookBlock
 	//	*ClientMessage_BackupConnected
 	//	*ClientMessage_SyncAllMission
+	//	*ClientMessage_SyncAllDbCargo
+	//	*ClientMessage_SyncAllMemoryCargo
 	Payload       isClientMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -705,7 +759,7 @@ type ClientMessage struct {
 
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
-	mi := &file_ha_proto_msgTypes[9]
+	mi := &file_ha_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -717,7 +771,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[9]
+	mi := &file_ha_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,7 +784,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{9}
+	return file_ha_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ClientMessage) GetPayload() isClientMessage_Payload {
@@ -848,6 +902,24 @@ func (x *ClientMessage) GetSyncAllMission() string {
 	return ""
 }
 
+func (x *ClientMessage) GetSyncAllDbCargo() string {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_SyncAllDbCargo); ok {
+			return x.SyncAllDbCargo
+		}
+	}
+	return ""
+}
+
+func (x *ClientMessage) GetSyncAllMemoryCargo() *SyncAllMemoryCargo {
+	if x != nil {
+		if x, ok := x.Payload.(*ClientMessage_SyncAllMemoryCargo); ok {
+			return x.SyncAllMemoryCargo
+		}
+	}
+	return nil
+}
+
 type isClientMessage_Payload interface {
 	isClientMessage_Payload()
 }
@@ -900,6 +972,14 @@ type ClientMessage_SyncAllMission struct {
 	SyncAllMission string `protobuf:"bytes,12,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
 }
 
+type ClientMessage_SyncAllDbCargo struct {
+	SyncAllDbCargo string `protobuf:"bytes,13,opt,name=sync_all_db_cargo,json=syncAllDbCargo,proto3,oneof"`
+}
+
+type ClientMessage_SyncAllMemoryCargo struct {
+	SyncAllMemoryCargo *SyncAllMemoryCargo `protobuf:"bytes,14,opt,name=sync_all_memory_cargo,json=syncAllMemoryCargo,proto3,oneof"`
+}
+
 func (*ClientMessage_Hb) isClientMessage_Payload() {}
 
 func (*ClientMessage_IsMaster) isClientMessage_Payload() {}
@@ -924,6 +1004,10 @@ func (*ClientMessage_BackupConnected) isClientMessage_Payload() {}
 
 func (*ClientMessage_SyncAllMission) isClientMessage_Payload() {}
 
+func (*ClientMessage_SyncAllDbCargo) isClientMessage_Payload() {}
+
+func (*ClientMessage_SyncAllMemoryCargo) isClientMessage_Payload() {}
+
 // 從交管送過來的資料
 type ServerMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -941,6 +1025,8 @@ type ServerMessage struct {
 	//	*ServerMessage_MissionAssign
 	//	*ServerMessage_BookBlock
 	//	*ServerMessage_SyncAllMission
+	//	*ServerMessage_SyncAllDbCargo
+	//	*ServerMessage_SyncAllMemoryCargo
 	Payload       isServerMessage_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -948,7 +1034,7 @@ type ServerMessage struct {
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
-	mi := &file_ha_proto_msgTypes[10]
+	mi := &file_ha_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -960,7 +1046,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ha_proto_msgTypes[10]
+	mi := &file_ha_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -973,7 +1059,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_ha_proto_rawDescGZIP(), []int{10}
+	return file_ha_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ServerMessage) GetPayload() isServerMessage_Payload {
@@ -1091,6 +1177,24 @@ func (x *ServerMessage) GetSyncAllMission() string {
 	return ""
 }
 
+func (x *ServerMessage) GetSyncAllDbCargo() string {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_SyncAllDbCargo); ok {
+			return x.SyncAllDbCargo
+		}
+	}
+	return ""
+}
+
+func (x *ServerMessage) GetSyncAllMemoryCargo() *SyncAllMemoryCargo {
+	if x != nil {
+		if x, ok := x.Payload.(*ServerMessage_SyncAllMemoryCargo); ok {
+			return x.SyncAllMemoryCargo
+		}
+	}
+	return nil
+}
+
 type isServerMessage_Payload interface {
 	isServerMessage_Payload()
 }
@@ -1144,6 +1248,14 @@ type ServerMessage_SyncAllMission struct {
 	SyncAllMission string `protobuf:"bytes,12,opt,name=sync_all_mission,json=syncAllMission,proto3,oneof"`
 }
 
+type ServerMessage_SyncAllDbCargo struct {
+	SyncAllDbCargo string `protobuf:"bytes,13,opt,name=sync_all_db_cargo,json=syncAllDbCargo,proto3,oneof"`
+}
+
+type ServerMessage_SyncAllMemoryCargo struct {
+	SyncAllMemoryCargo *SyncAllMemoryCargo `protobuf:"bytes,14,opt,name=sync_all_memory_cargo,json=syncAllMemoryCargo,proto3,oneof"`
+}
+
 func (*ServerMessage_Hb) isServerMessage_Payload() {}
 
 func (*ServerMessage_IsEcsConnected) isServerMessage_Payload() {}
@@ -1167,6 +1279,10 @@ func (*ServerMessage_MissionAssign) isServerMessage_Payload() {}
 func (*ServerMessage_BookBlock) isServerMessage_Payload() {}
 
 func (*ServerMessage_SyncAllMission) isServerMessage_Payload() {}
+
+func (*ServerMessage_SyncAllDbCargo) isServerMessage_Payload() {}
+
+func (*ServerMessage_SyncAllMemoryCargo) isServerMessage_Payload() {}
 
 var File_ha_proto protoreflect.FileDescriptor
 
@@ -1234,7 +1350,11 @@ const file_ha_proto_rawDesc = "" +
 	"actionType\"R\n" +
 	"\x12UpdateAmrCargoInfo\x12\x15\n" +
 	"\x06amr_id\x18\x01 \x01(\tR\x05amrId\x12%\n" +
-	"\x05cargo\x18\x02 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"\xfe\x04\n" +
+	"\x05cargo\x18\x02 \x03(\v2\x0f.ha_pb.UCICargoR\x05cargo\"P\n" +
+	"\x12SyncAllMemoryCargo\x12\x1d\n" +
+	"\n" +
+	"cargo_json\x18\x01 \x01(\tR\tcargoJson\x12\x1b\n" +
+	"\tarea_type\x18\x02 \x01(\tR\bareaType\"\xfb\x05\n" +
 	"\rClientMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12\x1d\n" +
 	"\tis_master\x18\x02 \x01(\bH\x00R\bisMaster\x12#\n" +
@@ -1249,8 +1369,10 @@ const file_ha_proto_rawDesc = "" +
 	"book_block\x18\n" +
 	" \x01(\tH\x00R\tbookBlock\x12+\n" +
 	"\x10backup_connected\x18\v \x01(\tH\x00R\x0fbackupConnected\x12*\n" +
-	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
-	"\apayload\"\x8e\x05\n" +
+	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMission\x12+\n" +
+	"\x11sync_all_db_cargo\x18\r \x01(\tH\x00R\x0esyncAllDbCargo\x12N\n" +
+	"\x15sync_all_memory_cargo\x18\x0e \x01(\v2\x19.ha_pb.SyncAllMemoryCargoH\x00R\x12syncAllMemoryCargoB\t\n" +
+	"\apayload\"\x8b\x06\n" +
 	"\rServerMessage\x12\x10\n" +
 	"\x02hb\x18\x01 \x01(\x05H\x00R\x02hb\x12*\n" +
 	"\x10is_ecs_connected\x18\x02 \x01(\bH\x00R\x0eisEcsConnected\x12.\n" +
@@ -1265,7 +1387,9 @@ const file_ha_proto_rawDesc = "" +
 	" \x01(\v2\x14.ha_pb.MissionAssignH\x00R\rmissionAssign\x12\x1f\n" +
 	"\n" +
 	"book_block\x18\v \x01(\tH\x00R\tbookBlock\x12*\n" +
-	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMissionB\t\n" +
+	"\x10sync_all_mission\x18\f \x01(\tH\x00R\x0esyncAllMission\x12+\n" +
+	"\x11sync_all_db_cargo\x18\r \x01(\tH\x00R\x0esyncAllDbCargo\x12N\n" +
+	"\x15sync_all_memory_cargo\x18\x0e \x01(\v2\x19.ha_pb.SyncAllMemoryCargoH\x00R\x12syncAllMemoryCargoB\t\n" +
 	"\apayload2J\n" +
 	"\tHAService\x12=\n" +
 	"\vHAStreaming\x12\x14.ha_pb.ClientMessage\x1a\x14.ha_pb.ServerMessage(\x010\x01B\x18Z\x16kenmec/ha/protoGen;genb\x06proto3"
@@ -1282,7 +1406,7 @@ func file_ha_proto_rawDescGZIP() []byte {
 	return file_ha_proto_rawDescData
 }
 
-var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_ha_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_ha_proto_goTypes = []any{
 	(*BookingInfo)(nil),        // 0: ha_pb.BookingInfo
 	(*AgvWorkStatus)(nil),      // 1: ha_pb.AgvWorkStatus
@@ -1293,8 +1417,9 @@ var file_ha_proto_goTypes = []any{
 	(*UpdateCargoInfo)(nil),    // 6: ha_pb.UpdateCargoInfo
 	(*SaveCargoInfo)(nil),      // 7: ha_pb.SaveCargoInfo
 	(*UpdateAmrCargoInfo)(nil), // 8: ha_pb.UpdateAmrCargoInfo
-	(*ClientMessage)(nil),      // 9: ha_pb.ClientMessage
-	(*ServerMessage)(nil),      // 10: ha_pb.ServerMessage
+	(*SyncAllMemoryCargo)(nil), // 9: ha_pb.SyncAllMemoryCargo
+	(*ClientMessage)(nil),      // 10: ha_pb.ClientMessage
+	(*ServerMessage)(nil),      // 11: ha_pb.ServerMessage
 }
 var file_ha_proto_depIdxs = []int32{
 	5,  // 0: ha_pb.UpdateCargoInfo.cargo:type_name -> ha_pb.UCICargo
@@ -1305,19 +1430,21 @@ var file_ha_proto_depIdxs = []int32{
 	7,  // 5: ha_pb.ClientMessage.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
 	8,  // 6: ha_pb.ClientMessage.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
 	3,  // 7: ha_pb.ClientMessage.mission_assign:type_name -> ha_pb.MissionAssign
-	1,  // 8: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
-	2,  // 9: ha_pb.ServerMessage.mission_report:type_name -> ha_pb.MissionReport
-	6,  // 10: ha_pb.ServerMessage.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
-	7,  // 11: ha_pb.ServerMessage.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
-	8,  // 12: ha_pb.ServerMessage.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
-	3,  // 13: ha_pb.ServerMessage.mission_assign:type_name -> ha_pb.MissionAssign
-	9,  // 14: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
-	10, // 15: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
-	15, // [15:16] is the sub-list for method output_type
-	14, // [14:15] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	9,  // 8: ha_pb.ClientMessage.sync_all_memory_cargo:type_name -> ha_pb.SyncAllMemoryCargo
+	1,  // 9: ha_pb.ServerMessage.agv_work_status:type_name -> ha_pb.AgvWorkStatus
+	2,  // 10: ha_pb.ServerMessage.mission_report:type_name -> ha_pb.MissionReport
+	6,  // 11: ha_pb.ServerMessage.update_cargo_info:type_name -> ha_pb.UpdateCargoInfo
+	7,  // 12: ha_pb.ServerMessage.save_cargo_info:type_name -> ha_pb.SaveCargoInfo
+	8,  // 13: ha_pb.ServerMessage.update_amr_cargo_info:type_name -> ha_pb.UpdateAmrCargoInfo
+	3,  // 14: ha_pb.ServerMessage.mission_assign:type_name -> ha_pb.MissionAssign
+	9,  // 15: ha_pb.ServerMessage.sync_all_memory_cargo:type_name -> ha_pb.SyncAllMemoryCargo
+	10, // 16: ha_pb.HAService.HAStreaming:input_type -> ha_pb.ClientMessage
+	11, // 17: ha_pb.HAService.HAStreaming:output_type -> ha_pb.ServerMessage
+	17, // [17:18] is the sub-list for method output_type
+	16, // [16:17] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_ha_proto_init() }
@@ -1326,7 +1453,7 @@ func file_ha_proto_init() {
 		return
 	}
 	file_ha_proto_msgTypes[2].OneofWrappers = []any{}
-	file_ha_proto_msgTypes[9].OneofWrappers = []any{
+	file_ha_proto_msgTypes[10].OneofWrappers = []any{
 		(*ClientMessage_Hb)(nil),
 		(*ClientMessage_IsMaster)(nil),
 		(*ClientMessage_SyncMission)(nil),
@@ -1339,8 +1466,10 @@ func file_ha_proto_init() {
 		(*ClientMessage_BookBlock)(nil),
 		(*ClientMessage_BackupConnected)(nil),
 		(*ClientMessage_SyncAllMission)(nil),
+		(*ClientMessage_SyncAllDbCargo)(nil),
+		(*ClientMessage_SyncAllMemoryCargo)(nil),
 	}
-	file_ha_proto_msgTypes[10].OneofWrappers = []any{
+	file_ha_proto_msgTypes[11].OneofWrappers = []any{
 		(*ServerMessage_Hb)(nil),
 		(*ServerMessage_IsEcsConnected)(nil),
 		(*ServerMessage_IsFleetConnected)(nil),
@@ -1353,6 +1482,8 @@ func file_ha_proto_init() {
 		(*ServerMessage_MissionAssign)(nil),
 		(*ServerMessage_BookBlock)(nil),
 		(*ServerMessage_SyncAllMission)(nil),
+		(*ServerMessage_SyncAllDbCargo)(nil),
+		(*ServerMessage_SyncAllMemoryCargo)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1360,7 +1491,7 @@ func file_ha_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ha_proto_rawDesc), len(file_ha_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

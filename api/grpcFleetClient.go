@@ -27,7 +27,8 @@ type GRPCFleetClient struct {
 	isConnected    bool
 
 	//用類似callback的方式 可以在其他地方呼叫用
-	OnReceiveMsg     func(msg *pb.ServerMessage)
+	OnReceiveMsg func(msg *pb.ServerMessage)
+	// 當連線到本機交管 通知本機交管現在身份
 	OnFleetConnected func()
 }
 

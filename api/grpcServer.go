@@ -22,6 +22,7 @@ type HAToOtherServer struct {
 	//用類似callback的方式 可以在其他地方呼叫用
 	OnReceiveMsg func(msg *pb.StatusRequest)
 
+	// 當本機的grpc聯繫到另外一台時 如果是另外一台是backup 會通知交管傳送目前所以任務以及貨物資料
 	OnClientConnected func()
 }
 

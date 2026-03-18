@@ -75,6 +75,11 @@ message UpdateAmrCargoInfo {
   repeated UCICargo cargo  = 2;
 }
 
+message SyncAllMemoryCargo {
+  string cargo_json = 1;
+  string area_type  = 2;
+}
+
 // 從ha送過去給交管的資料
 message ClientMessage {
   oneof payload {
@@ -91,6 +96,8 @@ message ClientMessage {
     string             book_block            = 10;
     string             backup_connected      = 11;
     string             sync_all_mission      = 12;
+    string             sync_all_db_cargo     = 13;
+    SyncAllMemoryCargo sync_all_memory_cargo = 14;
   }
 }
 
@@ -111,6 +118,8 @@ message ServerMessage {
     MissionAssign      mission_assign        = 10;
     string             book_block            = 11;
     string             sync_all_mission      = 12;
+    string             sync_all_db_cargo     = 13;
+    SyncAllMemoryCargo sync_all_memory_cargo = 14;
   }
 }
 

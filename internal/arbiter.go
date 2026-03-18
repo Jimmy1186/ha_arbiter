@@ -194,6 +194,20 @@ func (a *Arbiter) otherHaMsgHandler() {
 				},
 			})
 
+		case *gen.StatusRequest_SyncAllDbCargo:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_SyncAllDbCargo{
+					SyncAllDbCargo: m.SyncAllDbCargo,
+				},
+			})
+
+		case *gen.StatusRequest_SyncAllMemoryCargo:
+			a.fleetClient.SendMessageToFleet(&gen.ClientMessage{
+				Payload: &gen.ClientMessage_SyncAllMemoryCargo{
+					SyncAllMemoryCargo: m.SyncAllMemoryCargo,
+				},
+			})
+
 		default:
 			fmt.Printf("❓ 收到未定義的訊息類型: %T", m)
 		}
@@ -203,6 +217,7 @@ func (a *Arbiter) otherHaMsgHandler() {
 
 func (a *Arbiter) whenFleetConnect() {
 	a.fleetClient.OnFleetConnected = func() {
+		log.Println("連線到本機交管")
 		a.UpdateMaster(a.IsMaster)
 	}
 }
@@ -332,6 +347,20 @@ func (a *Arbiter) fleetMsgHandler() {
 			a.otherHaClient.SendMessage(&gen.StatusRequest{
 				Payload: &gen.StatusRequest_SyncAllMission{
 					SyncAllMission: m.SyncAllMission,
+				},
+			})
+
+		case *gen.ServerMessage_SyncAllDbCargo:
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_SyncAllDbCargo{
+					SyncAllDbCargo: m.SyncAllDbCargo,
+				},
+			})
+
+		case *gen.ServerMessage_SyncAllMemoryCargo:
+			a.otherHaClient.SendMessage(&gen.StatusRequest{
+				Payload: &gen.StatusRequest_SyncAllMemoryCargo{
+					SyncAllMemoryCargo: m.SyncAllMemoryCargo,
 				},
 			})
 

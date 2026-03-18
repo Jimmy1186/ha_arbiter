@@ -29,6 +29,8 @@ message StatusRequest {
     ha_pb.MissionAssign      mission_assign        = 12;
     string                   book_block            = 13;
     string                   sync_all_mission      = 14;
+    string                   sync_all_db_cargo     = 15;
+    ha_pb.SyncAllMemoryCargo sync_all_memory_cargo = 16;
   }
 }
 
@@ -50,6 +52,8 @@ message StatusResponse {
     ha_pb.MissionAssign      mission_assign        = 12;
     string                   book_block            = 13;
     string                   sync_all_mission      = 14;
+    string                   sync_all_db_cargo     = 15;
+    ha_pb.SyncAllMemoryCargo sync_all_memory_cargo = 16;
   }
 }
 
